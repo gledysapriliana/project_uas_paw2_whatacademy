@@ -1,0 +1,21 @@
+<div class="form-wrap">
+  <h3>Tambah Peserta</h3>
+  <form (ngSubmit)="submit()">
+    <label>Nama
+      <input name="name" [(ngModel)]="name" required />
+    </label>
+
+    <label>Email
+      <input name="email" [(ngModel)]="email" />
+    </label>
+
+    <label>Telepon
+      <input name="phone" [(ngModel)]="phone" />
+    </label>
+
+    <div class="actions">
+      <button type="submit">Simpan</button>
+      <button type="button" (click)="cancel()">Batal</button>
+    </div>
+  </form>
+</div>

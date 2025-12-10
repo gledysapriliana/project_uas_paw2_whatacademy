@@ -1,0 +1,5 @@
+.form-wrap{max-width:600px;margin:1.25rem auto;padding:1rem;border:1px solid #eaeaea;border-radius:6px}
+label{display:block;margin-bottom:.75rem}
+input{width:100%;padding:.5rem;margin-top:.25rem}
+.actions{margin-top:1rem}
+.actions button{margin-right:.5rem}

@@ -1,0 +1,28 @@
+<div class="dashboard">
+  <header>
+    <h2>Dashboard Peserta</h2>
+    <div class="meta">
+      <span>Halo, {{ currentUser }}</span>
+      <button (click)="logout()">Keluar</button>
+    </div>
+  </header>
+
+  <div class="actions">
+    <button (click)="goAdd()">Tambah Peserta</button>
+  </div>
+
+  <table class="list">
+    <thead>
+      <tr><th>Nama</th><th>Email</th><th>Telepon</th><th>Aksi</th></tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of participants">
+        <td>{{ p.name }}</td>
+        <td>{{ p.email }}</td>
+        <td>{{ p.phone }}</td>
+        <td><button (click)="remove(p.id)">Hapus</button></td>
+      </tr>
+      <tr *ngIf="participants.length === 0"><td colspan="4">Belum ada peserta.</td></tr>
+    </tbody>
+  </table>
+</div>
