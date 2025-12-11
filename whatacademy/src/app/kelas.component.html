@@ -1,0 +1,75 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1>Kelas</h1>
+      <p>Kelola kelas dan jadwal kursus di sini.</p>
+    </div>
+    <button class="primary-btn" (click)="openModal()">+ Tambah Kelas</button>
+  </div>
+
+  <div *ngFor="let group of kelasGroups" class="level-section">
+    <h2 [ngClass]="'level-' + group.level.toLowerCase()">{{ group.level }} Level</h2>
+    <div class="cards">
+      <div *ngFor="let k of group.kelas" class="card">
+        <div class="card-title">{{ k.namaKelas }}</div>
+        <div class="card-body">
+          <div class="info-row">🕐 {{ k.jadwal }}</div>
+          <div class="info-row">👨‍🏫 {{ k.instruktur }}</div>
+          <div class="info-row">👥 {{ k.kapasitas }} peserta</div>
+        </div>
+        <div class="card-actions">
+          <button class="btn-edit">✏️ Edit</button>
+          <button class="btn-delete" (click)="deleteKelas(k.id)">🗑️ Hapus</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Tambah Kelas Baru</h2>
+        <button class="close-btn" (click)="closeModal()">✕</button>
+      </div>
+
+      <div *ngIf="error" class="error-msg">❌ {{ error }}</div>
+
+      <form (ngSubmit)="submit()" class="modal-form">
+        <div class="form-group">
+          <label>Nama Kelas</label>
+          <input type="text" [(ngModel)]="namaKelas" name="namaKelas" placeholder="contoh: English Basics A" required />
+        </div>
+
+        <div class="form-group">
+          <label>Level</label>
+          <select [(ngModel)]="level" name="level" required>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Jadwal</label>
+          <input type="text" [(ngModel)]="jadwal" name="jadwal" placeholder="contoh: Senin & Rabu, 09:00 - 11:00" required />
+        </div>
+
+        <div class="form-group">
+          <label>Instruktur</label>
+          <input type="text" [(ngModel)]="instruktur" name="instruktur" placeholder="contoh: Mr. John Smith" required />
+        </div>
+
+        <div class="form-group">
+          <label>Kapasitas Maksimal</label>
+          <input type="number" [(ngModel)]="kapasitas" name="kapasitas" placeholder="15" required />
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" (click)="closeModal()">Batal</button>
+          <button type="submit" class="btn-submit">Tambah Kelas</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

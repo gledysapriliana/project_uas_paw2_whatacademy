@@ -1,0 +1,42 @@
+.page { padding: 1rem 0 }
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem }
+.page-header h1 { margin: 0; font-size: 2rem }
+.page-header p { margin: 0.25rem 0 0 0; color: #666 }
+.primary-btn { background: #3b82f6; color: #fff; border: none; padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer }
+.primary-btn:hover { background: #2563eb }
+
+.level-section { margin-bottom: 3rem }
+.level-section h2 { margin: 0 0 1.5rem 0; font-size: 1.3rem; padding-bottom: 0.5rem }
+.level-beginner { color: #3b82f6 }
+.level-intermediate { color: #10b981 }
+.level-advanced { color: #f59e0b }
+
+.cards { display: flex; gap: 1.5rem; flex-wrap: wrap }
+.card { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); min-width: 300px; display: flex; flex-direction: column }
+.card-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 0.75rem; color: #111 }
+.card-body { flex: 1; color: #666; font-size: 0.95rem }
+.info-row { margin: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem }
+.card-actions { display: flex; gap: 0.75rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e5e7eb }
+.btn-edit, .btn-delete { border: none; padding: 0.5rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 500 }
+.btn-edit { background: #e0e7ff; color: #3730a3 }
+.btn-edit:hover { background: #c7d2fe }
+.btn-delete { background: #fee2e2; color: #991b1b }
+.btn-delete:hover { background: #fecaca }
+
+.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000 }
+.modal-card { background: #fff; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto }
+.modal-header { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; border-bottom: 1px solid #e5e7eb }
+.modal-header h2 { margin: 0; font-size: 1.3rem }
+.close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999 }
+.close-btn:hover { color: #333 }
+.error-msg { color: #dc2626; background: #fee2e2; padding: 0.75rem 1rem; border-radius: 6px; margin: 1rem 1.5rem 0 }
+.modal-form { padding: 1.5rem }
+.form-group { margin-bottom: 1.5rem }
+.form-group label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: #333 }
+.form-group input, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; box-sizing: border-box }
+.form-group input:focus, .form-group select:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1) }
+.form-actions { display: flex; gap: 1rem; justify-content: flex-end; padding-top: 1rem }
+.btn-cancel { background: #f3f4f6; color: #333; border: none; padding: 0.6rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 500 }
+.btn-cancel:hover { background: #e5e7eb }
+.btn-submit { background: #3b82f6; color: #fff; border: none; padding: 0.6rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600 }
+.btn-submit:hover { background: #2563eb }

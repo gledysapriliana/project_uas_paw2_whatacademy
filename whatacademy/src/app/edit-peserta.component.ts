@@ -19,6 +19,7 @@ export class EditPesertaComponent implements OnInit {
   error = '';
   loading = false;
   initialLoading = true;
+  success = '';
 
   constructor(
     private apiService: ApiService,
@@ -27,27 +28,36 @@ export class EditPesertaComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.paramMap.subscribe((params) => {
-      this.id = params.get('id') || '';
+    this.route.params.subscribe((params) => {
+      this.id = params['id'] || '';
+      console.log('Edit ID:', this.id);
       if (this.id) {
         this.loadParticipant();
       } else {
         this.initialLoading = false;
+        this.error = 'ID peserta tidak ditemukan!';
       }
     });
   }
 
   loadParticipant() {
+    console.log('Loading participant with ID:', this.id);
     this.apiService.getParticipant(this.id).subscribe({
-      next: (participant: any) => {
-        this.name = participant.name;
-        this.email = participant.email || '';
-        this.phone = participant.phone || '';
+      next: (data: any) => {
+        console.log('Successfully loaded:', data);
+        this.name = data.name || '';
+        this.email = data.email || '';
+        this.phone = data.phone || '';
+        this.error = '';
         this.initialLoading = false;
       },
-      error: (err) => {
-        this.error = 'Gagal memuat data peserta';
+      error: (err: any) => {
+        console.error('Load error:', err);
+        const msg = err.error?.error || err.message || 'Gagal memuat peserta';
+        this.error = 'Gagal memuat peserta: ' + msg;
         this.initialLoading = false;
+        alert('❌ ' + this.error);
+        setTimeout(() => this.router.navigate(['/dashboard']), 1400);
       }
     });
   }
@@ -59,17 +69,20 @@ export class EditPesertaComponent implements OnInit {
     }
     this.error = '';
     this.loading = true;
+    
     this.apiService.updateParticipant(this.id, {
       name: this.name.trim(),
       email: this.email.trim(),
       phone: this.phone.trim()
     }).subscribe({
       next: () => {
+        alert('✅ Peserta berhasil diperbarui!');
         this.router.navigate(['/dashboard']);
-        this.loading = false;
       },
-      error: (err) => {
-        this.error = err.error?.error || 'Gagal mengupdate peserta';
+      error: (err: any) => {
+        const errMsg = err.error?.error || 'Gagal update peserta';
+        alert('❌ ' + errMsg);
+        this.error = errMsg;
         this.loading = false;
       }
     });

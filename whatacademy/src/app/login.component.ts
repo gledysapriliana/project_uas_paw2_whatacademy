@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -24,6 +24,12 @@ export class LoginComponent {
     private apiService: ApiService
   ) {}
 
+  ngOnInit() {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/dashboard']);
+    }
+  }
+
   login() {
     this.error = '';
     this.loading = true;
@@ -42,11 +48,13 @@ export class LoginComponent {
 
     this.apiService.login(this.username.trim(), this.password.trim()).subscribe({
       next: (response) => {
+        alert('✅ Login berhasil!');
         this.authService.setCurrentUser(response.user);
         this.router.navigate(['/dashboard']);
         this.loading = false;
       },
       error: (err) => {
+        alert('❌ ' + (err.error?.error || 'Login gagal!'));
         this.error = err.error?.error || 'Login gagal!';
         this.loading = false;
       }

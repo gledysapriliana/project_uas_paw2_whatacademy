@@ -59,10 +59,12 @@ export class DashboardComponent implements OnInit {
     if (!confirm('Hapus peserta ini?')) return;
     this.apiService.deleteParticipant(id).subscribe({
       next: () => {
+        alert('✅ Peserta berhasil dihapus!');
         this.load();
       },
       error: (err) => {
-        alert(err.error?.error || 'Gagal menghapus peserta');
+        const errMsg = err.error?.error || 'Gagal menghapus peserta';
+        alert('❌ ' + errMsg);
       }
     });
   }

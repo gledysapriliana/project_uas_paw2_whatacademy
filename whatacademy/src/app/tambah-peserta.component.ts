@@ -36,10 +36,12 @@ export class TambahPesertaComponent {
       this.phone.trim()
     ).subscribe({
       next: () => {
+        alert('✅ Peserta berhasil ditambahkan!');
         this.router.navigate(['/dashboard']);
         this.loading = false;
       },
       error: (err) => {
+        alert('❌ ' + (err.error?.error || 'Gagal menambah peserta'));
         this.error = err.error?.error || 'Gagal menambah peserta';
         this.loading = false;
       }

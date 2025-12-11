@@ -1,4 +1,13 @@
 {
+  "admin": {
+    "username": "admin",
+    "email": "admin@whatacademy.com",
+    "fullName": "Administrator",
+    "password": "admin123",
+    "phone": "081234567890",
+    "role": "admin",
+    "createdAt": "2025-12-11T07:30:00.000Z"
+  },
   "joji": {
     "username": "joji",
     "email": "joji123@gmail.com",
@@ -25,5 +34,14 @@
     "phone": "087283829382",
     "role": "user",
     "createdAt": "2025-12-11T07:40:12.433Z"
+  },
+  "putri": {
+    "username": "putri",
+    "email": "putripadang321@gmail.com",
+    "fullName": "putri padang",
+    "password": "12345678",
+    "phone": "087283829382",
+    "role": "user",
+    "createdAt": "2025-12-11T11:31:12.030Z"
   }
 }

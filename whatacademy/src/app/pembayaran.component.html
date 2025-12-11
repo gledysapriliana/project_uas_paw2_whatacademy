@@ -1,0 +1,93 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1>Pembayaran</h1>
+      <p>Kelola status pembayaran peserta di sini.</p>
+    </div>
+    <button class="primary-btn" (click)="openModal()">+ Catat Pembayaran</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-icon">💼</div>
+      <div><div class="stat-label">Total Peserta</div><div class="stat-value">{{ getTotalPeserta() }}</div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">✅</div>
+      <div><div class="stat-label">Lunas</div><div class="stat-value">{{ getLunasCount() }}</div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">⏱️</div>
+      <div><div class="stat-label">Belum Lunas</div><div class="stat-value">{{ getBelumLunasCount() }}</div></div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Peserta</th>
+          <th>Metode</th>
+          <th>Status</th>
+          <th>Riwayat Terakhir</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of pembayaranList">
+          <td><strong>{{ p.peserta }}</strong></td>
+          <td>{{ p.metode }}</td>
+          <td><span class="badge" [ngClass]="p.status === 'Lunas' ? 'lunas' : 'belum'">{{ p.status }}</span></td>
+          <td>{{ formatRupiah(p.jumlah) }}<br><span class="sub">{{ p.tanggal }}</span></td>
+          <td><button class="btn-delete" (click)="deletePembayaran(p.id)">🗑️ Hapus</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Catat Pembayaran</h2>
+        <button class="close-btn" (click)="closeModal()">✕</button>
+      </div>
+
+      <div *ngIf="error" class="error-msg">❌ {{ error }}</div>
+
+      <form (ngSubmit)="submit()" class="modal-form">
+        <div class="form-group">
+          <label>Peserta</label>
+          <input type="text" [(ngModel)]="peserta" name="peserta" placeholder="Nama peserta..." required />
+        </div>
+
+        <div class="form-group">
+          <label>Jumlah (Rp)</label>
+          <input type="number" [(ngModel)]="jumlah" name="jumlah" placeholder="1500000" required />
+        </div>
+
+        <div class="form-group">
+          <label>Metode Pembayaran</label>
+          <select [(ngModel)]="metode" name="metode" required>
+            <option value="Transfer Bank">Transfer Bank</option>
+            <option value="E-Wallet">E-Wallet</option>
+            <option value="Cash">Cash</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Status</label>
+          <select [(ngModel)]="status" name="status" required>
+            <option value="Lunas">Lunas</option>
+            <option value="Belum Lunas">Belum Lunas</option>
+          </select>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" (click)="closeModal()">Batal</button>
+          <button type="submit" class="btn-submit">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

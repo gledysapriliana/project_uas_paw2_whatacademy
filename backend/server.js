@@ -59,6 +59,8 @@ const saveParticipants = (participants) => {
 app.post('/api/auth/register', (req, res) => {
   const { username, email, fullName, password, phone } = req.body;
 
+  const normalizedUsername = username ? String(username).trim().toLowerCase() : '';
+
   // Validation
   if (!username || !email || !fullName || !password) {
     return res.status(400).json({ error: 'Semua field harus diisi!' });
@@ -69,24 +71,25 @@ app.post('/api/auth/register', (req, res) => {
   }
 
   const users = getUsers();
-  if (users[username]) {
+  if (!normalizedUsername) return res.status(400).json({ error: 'Username tidak valid' });
+  if (Object.values(users).some(u => String(u.username).trim().toLowerCase() === normalizedUsername)) {
     return res.status(400).json({ error: 'Username sudah terdaftar!' });
   }
 
-  // Save user
-  users[username] = {
-    username,
-    email,
-    fullName,
-    password,
-    phone: phone || '',
+  // Save user using normalized key
+  users[normalizedUsername] = {
+    username: String(username).trim(),
+    email: String(email).trim(),
+    fullName: String(fullName).trim(),
+    password: String(password),
+    phone: phone ? String(phone).trim() : '',
     role: 'user',
     createdAt: new Date().toISOString()
   };
 
   saveUsers(users);
 
-  res.status(201).json({ message: 'Registrasi berhasil!', user: { username, email, fullName } });
+  res.status(201).json({ message: 'Registrasi berhasil!', user: { username: users[normalizedUsername].username, email: users[normalizedUsername].email, fullName: users[normalizedUsername].fullName } });
 });
 
 // Login
@@ -98,13 +101,14 @@ app.post('/api/auth/login', (req, res) => {
   }
 
   const users = getUsers();
-  const user = users[username];
+  const normalizedUsername = String(username).trim().toLowerCase();
+  const user = users[normalizedUsername];
 
   if (!user) {
     return res.status(401).json({ error: 'Pengguna tidak tersedia. Harap registrasi terlebih dahulu.' });
   }
 
-  if (user.password !== password) {
+  if (String(user.password) !== String(password)) {
     return res.status(401).json({ error: 'Password salah. Silakan coba lagi.' });
   }
 

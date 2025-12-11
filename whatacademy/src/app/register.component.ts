@@ -62,6 +62,7 @@ export class RegisterComponent {
       this.phone.trim()
     ).subscribe({
       next: () => {
+        alert('✅ Pendaftaran berhasil! Silakan login.');
         this.successMessage = 'Pendaftaran berhasil! Redirect ke login...';
         this.loading = false;
         setTimeout(() => {
@@ -69,6 +70,7 @@ export class RegisterComponent {
         }, 2000);
       },
       error: (err) => {
+        alert('❌ ' + (err.error?.error || 'Registrasi gagal!'));
         this.errorMessage = err.error?.error || 'Registrasi gagal!';
         this.loading = false;
       }
