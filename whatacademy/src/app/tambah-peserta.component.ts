@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ParticipantService } from './participant.service';
+import { CommonModule } from '@angular/common';
+import { ApiService } from './api.service';
 
 @Component({
   selector: 'app-tambah-peserta',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './tambah-peserta.component.html',
   styleUrls: ['./tambah-peserta.component.css']
 })
@@ -14,13 +15,35 @@ export class TambahPesertaComponent {
   name = '';
   email = '';
   phone = '';
+  error = '';
+  loading = false;
 
-  constructor(private service: ParticipantService, private router: Router) {}
+  constructor(private apiService: ApiService, private router: Router) {}
 
   submit() {
-    if (!this.name.trim()) return;
-    this.service.add({ name: this.name.trim(), email: this.email.trim(), phone: this.phone.trim() });
-    this.router.navigate(['/dashboard']);
+    this.error = '';
+    this.loading = true;
+    
+    if (!this.name.trim()) {
+      this.error = 'Nama tidak boleh kosong';
+      this.loading = false;
+      return;
+    }
+    
+    this.apiService.addParticipant(
+      this.name.trim(),
+      this.email.trim(),
+      this.phone.trim()
+    ).subscribe({
+      next: () => {
+        this.router.navigate(['/dashboard']);
+        this.loading = false;
+      },
+      error: (err) => {
+        this.error = err.error?.error || 'Gagal menambah peserta';
+        this.loading = false;
+      }
+    });
   }
 
   cancel() {

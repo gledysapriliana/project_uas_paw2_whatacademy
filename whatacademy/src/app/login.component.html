@@ -1,5 +1,10 @@
 <div class="login-container">
   <h2>Masuk — WhatAcademy</h2>
+  
+  <div *ngIf="error" style="color:#c33;margin-bottom:1rem;padding:0.75rem;background:#fee;border:1px solid #fcc;border-radius:4px;">
+    {{ error }}
+  </div>
+
   <form (ngSubmit)="login()" #f="ngForm">
     <label>
       Nama pengguna
@@ -13,4 +18,8 @@
 
     <button type="submit">Masuk</button>
   </form>
+  
+  <p style="margin-top:1rem;text-align:center;">
+    Belum punya akun? <a routerLink="/register" style="color:#667eea;text-decoration:none;font-weight:600;">Daftar di sini</a>
+  </p>
 </div>

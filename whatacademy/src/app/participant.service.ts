@@ -41,6 +41,19 @@ export class ParticipantService {
     this.write(items);
   }
 
+  getById(id: string): Participant | undefined {
+    return this.read().find((i) => i.id === id);
+  }
+
+  update(id: string, p: Omit<Participant, 'id'>) {
+    const items = this.read();
+    const index = items.findIndex((i) => i.id === id);
+    if (index !== -1) {
+      items[index] = { id, ...p };
+      this.write(items);
+    }
+  }
+
   clearAll() {
     localStorage.removeItem(this.storageKey);
   }

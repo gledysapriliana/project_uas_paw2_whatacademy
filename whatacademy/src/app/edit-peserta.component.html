@@ -1,0 +1,26 @@
+<div class="form-wrap">
+  <h3>Edit Peserta</h3>
+  
+  <div *ngIf="error" style="color:#c33;margin-bottom:1rem;padding:0.75rem;background:#fee;border-radius:4px;">
+    {{ error }}
+  </div>
+
+  <form (ngSubmit)="submit()">
+    <label>Nama
+      <input name="name" [(ngModel)]="name" required />
+    </label>
+
+    <label>Email
+      <input name="email" [(ngModel)]="email" />
+    </label>
+
+    <label>Telepon
+      <input name="phone" [(ngModel)]="phone" />
+    </label>
+
+    <div class="actions">
+      <button type="submit">Simpan Perubahan</button>
+      <button type="button" (click)="cancel()">Batal</button>
+    </div>
+  </form>
+</div>

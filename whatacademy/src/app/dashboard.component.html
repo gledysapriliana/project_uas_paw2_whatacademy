@@ -2,27 +2,31 @@
   <header>
     <h2>Dashboard Peserta</h2>
     <div class="meta">
-      <span>Halo, {{ currentUser }}</span>
+      <span>Halo, {{ currentUser }} <span *ngIf="isAdmin" style="background:#667eea;color:white;padding:0.25rem 0.5rem;border-radius:3px;margin-left:0.5rem;font-size:0.85rem;">(Admin)</span></span>
       <button (click)="logout()">Keluar</button>
     </div>
   </header>
 
-  <div class="actions">
+  <div *ngIf="isAdmin" class="actions">
     <button (click)="goAdd()">Tambah Peserta</button>
+  </div>
+
+  <div *ngIf="!isAdmin" style="padding:1rem;background:#f0f7ff;border:1px solid #e0ecff;border-radius:4px;margin:1rem 0;color:#0066cc;">
+    <strong>Catatan:</strong> Anda adalah pengguna biasa. Hanya admin yang dapat menambah atau mengedit peserta.
   </div>
 
   <table class="list">
     <thead>
-      <tr><th>Nama</th><th>Email</th><th>Telepon</th><th>Aksi</th></tr>
+      <tr><th>Nama</th><th>Email</th><th>Telepon</th><th *ngIf="isAdmin">Aksi</th></tr>
     </thead>
     <tbody>
       <tr *ngFor="let p of participants">
         <td>{{ p.name }}</td>
         <td>{{ p.email }}</td>
         <td>{{ p.phone }}</td>
-        <td><button (click)="remove(p.id)">Hapus</button></td>
+        <td *ngIf="isAdmin"><button (click)="edit(p.id)" style="margin-right:0.5rem;">Edit</button><button (click)="remove(p.id)">Hapus</button></td>
       </tr>
-      <tr *ngIf="participants.length === 0"><td colspan="4">Belum ada peserta.</td></tr>
+      <tr *ngIf="participants.length === 0"><td [attr.colspan]="isAdmin ? 4 : 3">Belum ada peserta.</td></tr>
     </tbody>
   </table>
 </div>

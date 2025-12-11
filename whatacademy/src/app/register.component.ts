@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ApiService } from './api.service';
 
 @Component({
   selector: 'app-register',
@@ -19,12 +20,14 @@ export class RegisterComponent {
   phone = '';
   errorMessage = '';
   successMessage = '';
+  loading = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private apiService: ApiService) {}
 
   register(): void {
     this.errorMessage = '';
     this.successMessage = '';
+    this.loading = true;
 
     // Validasi
     if (
@@ -34,33 +37,41 @@ export class RegisterComponent {
       !this.fullName.trim()
     ) {
       this.errorMessage = 'Semua field harus diisi!';
+      this.loading = false;
       return;
     }
 
     if (this.password !== this.confirmPassword) {
       this.errorMessage = 'Password dan konfirmasi password tidak cocok!';
+      this.loading = false;
       return;
     }
 
     if (this.password.length < 6) {
       this.errorMessage = 'Password minimal 6 karakter!';
+      this.loading = false;
       return;
     }
 
-    // Simpan ke localStorage
-    const user = {
-      username: this.username,
-      email: this.email,
-      fullName: this.fullName,
-      phone: this.phone,
-    };
-
-    localStorage.setItem('currentUser', this.username);
-    localStorage.setItem('userData_' + this.username, JSON.stringify(user));
-
-    this.successMessage = 'Pendaftaran berhasil! Redirect ke login...';
-    setTimeout(() => {
-      this.router.navigate(['/login']);
-    }, 2000);
+    // Register via API
+    this.apiService.register(
+      this.username.trim(),
+      this.email.trim(),
+      this.fullName.trim(),
+      this.password.trim(),
+      this.phone.trim()
+    ).subscribe({
+      next: () => {
+        this.successMessage = 'Pendaftaran berhasil! Redirect ke login...';
+        this.loading = false;
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 2000);
+      },
+      error: (err) => {
+        this.errorMessage = err.error?.error || 'Registrasi gagal!';
+        this.loading = false;
+      }
+    });
   }
 }

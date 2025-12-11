@@ -1,7 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { ParticipantService, Participant } from './participant.service';
+import { AuthService } from './auth.service';
+import { ApiService } from './api.service';
+
+export interface Participant {
+  id: string;
+  name: string;
+  email?: string;
+  phone?: string;
+}
 
 @Component({
   selector: 'app-dashboard',
@@ -10,23 +18,57 @@ import { ParticipantService, Participant } from './participant.service';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   participants: Participant[] = [];
   currentUser = '';
+  isAdmin = false;
+  loading = false;
 
-  constructor(private service: ParticipantService, private router: Router) {
+  constructor(
+    private authService: AuthService,
+    private apiService: ApiService,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+    
+    const user = this.authService.getCurrentUser();
+    this.currentUser = user?.fullName || '';
+    this.isAdmin = this.authService.isAdmin();
     this.load();
-    this.currentUser = localStorage.getItem('currentUser') || '';
   }
 
   load() {
-    this.participants = this.service.getAll();
+    this.loading = true;
+    this.apiService.getParticipants().subscribe({
+      next: (data) => {
+        this.participants = data;
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+      }
+    });
   }
 
   remove(id: string) {
     if (!confirm('Hapus peserta ini?')) return;
-    this.service.remove(id);
-    this.load();
+    this.apiService.deleteParticipant(id).subscribe({
+      next: () => {
+        this.load();
+      },
+      error: (err) => {
+        alert(err.error?.error || 'Gagal menghapus peserta');
+      }
+    });
+  }
+
+  edit(id: string) {
+    this.router.navigate(['/edit-peserta', id]);
   }
 
   goAdd() {
@@ -34,7 +76,7 @@ export class DashboardComponent {
   }
 
   logout() {
-    localStorage.removeItem('currentUser');
+    this.authService.logout();
     this.router.navigate(['/login']);
   }
 }
