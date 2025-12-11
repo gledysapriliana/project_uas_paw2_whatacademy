@@ -1,15 +1,11 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-
-import { LoginComponent } from './login.component';
-import { DashboardComponent } from './dashboard.component';
-import { TambahPesertaComponent } from './tambah-peserta.component';
+import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, LoginComponent, DashboardComponent, TambahPesertaComponent],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
 export class App {
   protected readonly title = signal('whatacademy');
