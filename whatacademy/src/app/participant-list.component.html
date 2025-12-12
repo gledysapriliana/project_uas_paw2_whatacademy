@@ -5,7 +5,7 @@
     <input
       type="text"
       class="form-control flex-grow-1"
-      style="min-width:200px"
+      style="min-width: 200px"
       placeholder="Cari nama / email / telepon..."
       [(ngModel)]="searchTerm"
       (keyup)="applyFilter()"
@@ -13,7 +13,7 @@
     <a
       routerLink="/tambah-peserta"
       class="btn text-white fw-600"
-      style="background:linear-gradient(90deg,#667eea,#764ba2)"
+      style="background: linear-gradient(90deg, #667eea, #764ba2)"
       >+ Tambah Peserta</a
     >
   </div>
@@ -36,16 +36,10 @@
           <td>{{ p.email || '-' }}</td>
           <td>{{ p.phone || '-' }}</td>
           <td>
-            <button
-              class="btn btn-sm btn-primary me-2"
-              (click)="editParticipant(p.id)"
-            >
+            <button class="btn btn-sm btn-primary me-2" (click)="editParticipant(p.id)">
               ✏️ Edit
             </button>
-            <button
-              class="btn btn-sm btn-danger"
-              (click)="deleteParticipant(p.id)"
-            >
+            <button class="btn btn-sm btn-danger" (click)="deleteParticipant(p.id)">
               🗑️ Hapus
             </button>
           </td>

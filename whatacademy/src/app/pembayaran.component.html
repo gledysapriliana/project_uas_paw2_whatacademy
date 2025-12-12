@@ -6,7 +6,7 @@
     </div>
     <button
       class="btn text-white fw-600"
-      style="background:linear-gradient(90deg,#667eea,#764ba2)"
+      style="background: linear-gradient(90deg, #667eea, #764ba2)"
       (click)="openModal()"
     >
       + Catat Pembayaran
@@ -17,7 +17,7 @@
     <div class="col-md-4">
       <div class="card border-0 shadow-sm">
         <div class="card-body d-flex gap-3 align-items-center">
-          <div style="font-size:2rem">💼</div>
+          <div style="font-size: 2rem">💼</div>
           <div>
             <div class="text-muted small">Total Peserta</div>
             <div class="fs-5 fw-bold">{{ getTotalPeserta() }}</div>
@@ -28,7 +28,7 @@
     <div class="col-md-4">
       <div class="card border-0 shadow-sm">
         <div class="card-body d-flex gap-3 align-items-center">
-          <div style="font-size:2rem">✅</div>
+          <div style="font-size: 2rem">✅</div>
           <div>
             <div class="text-muted small">Lunas</div>
             <div class="fs-5 fw-bold">{{ getLunasCount() }}</div>
@@ -39,7 +39,7 @@
     <div class="col-md-4">
       <div class="card border-0 shadow-sm">
         <div class="card-body d-flex gap-3 align-items-center">
-          <div style="font-size:2rem">⏱️</div>
+          <div style="font-size: 2rem">⏱️</div>
           <div>
             <div class="text-muted small">Belum Lunas</div>
             <div class="fs-5 fw-bold">{{ getBelumLunasCount() }}</div>
@@ -62,32 +62,22 @@
       </thead>
       <tbody>
         <tr *ngFor="let p of pembayaranList">
-          <td><strong>{{ p.peserta }}</strong></td>
+          <td>
+            <strong>{{ p.peserta }}</strong>
+          </td>
           <td>{{ p.metode }}</td>
           <td>
-            <span
-              class="badge"
-              [ngClass]="p.status === 'Lunas' ? 'bg-success' : 'bg-danger'"
-              >{{ p.status }}</span
-            >
+            <span class="badge" [ngClass]="p.status === 'Lunas' ? 'bg-success' : 'bg-danger'">{{
+              p.status
+            }}</span>
           </td>
           <td>
             {{ formatRupiah(p.jumlah) }}<br />
             <small class="text-muted">{{ p.tanggal }}</small>
           </td>
           <td>
-            <button
-              class="btn btn-sm btn-primary me-2"
-              (click)="openModal(p)"
-            >
-              ✏️ Edit
-            </button>
-            <button
-              class="btn btn-sm btn-danger"
-              (click)="deletePembayaran(p.id)"
-            >
-              🗑️ Hapus
-            </button>
+            <button class="btn btn-sm btn-primary me-2" (click)="openModal(p)">✏️ Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="deletePembayaran(p.id)">🗑️ Hapus</button>
           </td>
         </tr>
       </tbody>
@@ -115,21 +105,11 @@
           <form>
             <div class="mb-3">
               <label class="form-label">Peserta</label>
-              <input
-                type="text"
-                class="form-control"
-                [(ngModel)]="peserta"
-                name="peserta"
-              />
+              <input type="text" class="form-control" [(ngModel)]="peserta" name="peserta" />
             </div>
             <div class="mb-3">
               <label class="form-label">Jumlah (Rp)</label>
-              <input
-                type="number"
-                class="form-control"
-                [(ngModel)]="jumlah"
-                name="jumlah"
-              />
+              <input type="number" class="form-control" [(ngModel)]="jumlah" name="jumlah" />
             </div>
             <div class="mb-3">
               <label class="form-label">Metode Pembayaran</label>
@@ -149,13 +129,11 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeModal()">
-            Batal
-          </button>
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">Batal</button>
           <button
             type="button"
             class="btn text-white fw-600"
-            style="background:linear-gradient(90deg,#667eea,#764ba2)"
+            style="background: linear-gradient(90deg, #667eea, #764ba2)"
             (click)="submit()"
           >
             {{ editingId ? 'Perbarui' : 'Simpan' }}
@@ -164,9 +142,5 @@
       </div>
     </div>
   </div>
-  <div
-    class="modal-backdrop fade"
-    [class.show]="showModal"
-    *ngIf="showModal"
-  ></div>
+  <div class="modal-backdrop fade" [class.show]="showModal" *ngIf="showModal"></div>
 </div>

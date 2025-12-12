@@ -8,7 +8,7 @@ import { ParticipantService, Participant } from './participant.service';
   selector: 'app-participant-list',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: './participant-list.component.html'
+  templateUrl: './participant-list.component.html',
 })
 export class ParticipantListComponent implements OnInit {
   participants: Participant[] = [];

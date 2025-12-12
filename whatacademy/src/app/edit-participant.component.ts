@@ -1,68 +1,75 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ParticipantService, Participant } from './participant.service';
 import { ApiService } from './api.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-edit-participant',
+  selector: 'app-edit-peserta',
   standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './edit-participant.component.html'
+  imports: [FormsModule, CommonModule],
+  templateUrl: './edit-peserta.component.html',
 })
-export class EditParticipantComponent implements OnInit {
-  id = '';
-  participant: Participant | undefined;
+export class EditPesertaComponent implements OnInit {
   name = '';
   email = '';
   phone = '';
+  id = '';
   error = '';
-  success = '';
   loading = false;
+  initialLoading = true;
+  success = '';
 
   constructor(
+    private apiService: ApiService,
     private route: ActivatedRoute,
-    private router: Router,
-    private participantService: ParticipantService,
-    private api: ApiService
-  ) {
-    this.id = this.route.snapshot.paramMap.get('id') || '';
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    this.route.params.subscribe((params) => {
+      this.id = params['id'] || '';
+      console.log('Edit ID:', this.id);
+      if (this.id) {
+        this.loadParticipant();
+      } else {
+        this.initialLoading = false;
+        this.error = 'ID peserta tidak ditemukan!';
+      }
+    });
   }
 
-  ngOnInit(): void {
-    this.load();
+  loadParticipant() {
+    console.log('Loading participant with ID:', this.id);
+    this.apiService.getParticipant(this.id).subscribe({
+      next: (data: any) => {
+        console.log('Successfully loaded:', data);
+        this.name = data.name || '';
+        this.email = data.email || '';
+        this.phone = data.phone || '';
+        this.error = '';
+        this.initialLoading = false;
+      },
+      error: (err: any) => {
+        console.error('Load error:', err);
+        const msg = err.error?.error || err.message || 'Gagal memuat peserta';
+        this.error = 'Gagal memuat peserta: ' + msg;
+        this.initialLoading = false;
+        alert('❌ ' + this.error);
+        setTimeout(() => this.router.navigate(['/dashboard']), 1400);
+      },
+    });
   }
 
-  load() {
-    this.participant = this.participantService.getById(this.id);
-    if (this.participant) {
-      this.name = this.participant.name;
-      this.email = this.participant.email || '';
-      this.phone = this.participant.phone || '';
-    } else {
-      // try api fallback
-      this.api.getParticipant(this.id).subscribe({
-        next: (p) => {
-          this.name = p.name;
-          this.email = p.email || '';
-          this.phone = p.phone || '';
-        },
-        error: () => {
-          this.error = 'Peserta tidak ditemukan';
-        },
-      });
-    }
-  }
-
-  save() {
+  submit() {
     if (!this.name.trim()) {
       this.error = 'Nama tidak boleh kosong';
       return;
     }
+    this.error = '';
     this.loading = true;
-    // prefer ApiService update, fallback to ParticipantService
-    this.api
+
+    this.apiService
       .updateParticipant(this.id, {
         name: this.name.trim(),
         email: this.email.trim(),
@@ -70,31 +77,19 @@ export class EditParticipantComponent implements OnInit {
       })
       .subscribe({
         next: () => {
-          // also sync to local participant service
-          this.participantService.update(this.id, {
-            name: this.name.trim(),
-            email: this.email.trim(),
-            phone: this.phone.trim(),
-          });
-          this.success = 'Perubahan tersimpan';
-          this.loading = false;
-          setTimeout(() => this.router.navigate(['/peserta']), 800);
+          alert('✅ Peserta berhasil diperbarui!');
+          this.router.navigate(['/dashboard']);
         },
-        error: () => {
-          // fallback
-          this.participantService.update(this.id, {
-            name: this.name.trim(),
-            email: this.email.trim(),
-            phone: this.phone.trim(),
-          });
-          this.success = 'Perubahan tersimpan (local)';
+        error: (err: any) => {
+          const errMsg = err.error?.error || 'Gagal update peserta';
+          alert('❌ ' + errMsg);
+          this.error = errMsg;
           this.loading = false;
-          setTimeout(() => this.router.navigate(['/peserta']), 800);
         },
       });
   }
 
   cancel() {
-    this.router.navigate(['/peserta']);
+    this.router.navigate(['/dashboard']);
   }
 }

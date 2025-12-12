@@ -1,4 +1,4 @@
-<div class="p-4" style="max-width:700px;margin:0 auto">
+<div class="p-4" style="max-width: 700px; margin: 0 auto">
   <h1 class="mb-4">Edit Peserta</h1>
   <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
   <div *ngIf="success" class="alert alert-success">{{ success }}</div>
@@ -19,7 +19,13 @@
 
     <div class="d-flex gap-3">
       <button type="button" (click)="cancel()" class="btn btn-secondary">Batal</button>
-      <button type="submit" class="btn text-white" style="background:linear-gradient(90deg,#667eea,#764ba2)">Simpan</button>
+      <button
+        type="submit"
+        class="btn text-white"
+        style="background: linear-gradient(90deg, #667eea, #764ba2)"
+      >
+        Simpan
+      </button>
     </div>
   </form>
 </div>

@@ -1,24 +1,50 @@
-<div class="p-4" style="max-width:700px;margin:0 auto">
+<div class="p-4" style="max-width: 700px; margin: 0 auto">
   <h1 class="mb-4">Tambah Peserta Baru</h1>
   <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
   <form (ngSubmit)="submit()">
     <div class="mb-3">
       <label class="form-label fw-600">Nama</label>
-      <input type="text" class="form-control" [(ngModel)]="name" name="name" placeholder="Nama peserta" required />
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="name"
+        name="name"
+        placeholder="Nama peserta"
+        required
+      />
     </div>
     <div class="mb-3">
       <label class="form-label fw-600">Email</label>
-      <input type="email" class="form-control" [(ngModel)]="email" name="email" placeholder="Email peserta" />
+      <input
+        type="email"
+        class="form-control"
+        [(ngModel)]="email"
+        name="email"
+        placeholder="Email peserta"
+      />
     </div>
     <div class="mb-3">
       <label class="form-label fw-600">Telepon</label>
-      <input type="tel" class="form-control" [(ngModel)]="phone" name="phone" placeholder="Nomor telepon" />
+      <input
+        type="tel"
+        class="form-control"
+        [(ngModel)]="phone"
+        name="phone"
+        placeholder="Nomor telepon"
+      />
     </div>
 
     <div class="d-flex gap-3">
       <button type="button" (click)="cancel()" class="btn btn-secondary">Batal</button>
-      <button type="submit" class="btn text-white fw-600" style="background:linear-gradient(90deg,#667eea,#764ba2)" [disabled]="loading">Tambah Peserta</button>
+      <button
+        type="submit"
+        class="btn text-white fw-600"
+        style="background: linear-gradient(90deg, #667eea, #764ba2)"
+        [disabled]="loading"
+      >
+        Tambah Peserta
+      </button>
     </div>
   </form>
 </div>

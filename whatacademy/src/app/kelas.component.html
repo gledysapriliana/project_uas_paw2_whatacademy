@@ -4,11 +4,17 @@
       <h1 class="mb-1">Kelas</h1>
       <p class="text-muted">Kelola kelas dan jadwal kursus di sini.</p>
     </div>
-    <button class="btn text-white fw-600" style="background:linear-gradient(90deg,#667eea,#764ba2)" (click)="openModal()">+ Tambah Kelas</button>
+    <button
+      class="btn text-white fw-600"
+      style="background: linear-gradient(90deg, #667eea, #764ba2)"
+      (click)="openModal()"
+    >
+      + Tambah Kelas
+    </button>
   </div>
 
   <div *ngFor="let group of kelasGroups" class="mb-5">
-    <h4 class="mb-3 fw-bold text-uppercase" style="color:#667eea">{{ group.level }} Level</h4>
+    <h4 class="mb-3 fw-bold text-uppercase" style="color: #667eea">{{ group.level }} Level</h4>
     <div class="row g-3">
       <div *ngFor="let k of group.kelas" class="col-md-6 col-lg-4">
         <div class="card h-100 border-0 shadow-sm">
@@ -26,7 +32,13 @@
   </div>
 
   <!-- Modal -->
-  <div class="modal" [class.show]="showModal" [style.display]="showModal ? 'block' : 'none'" tabindex="-1" (click)="closeModal()">
+  <div
+    class="modal"
+    [class.show]="showModal"
+    [style.display]="showModal ? 'block' : 'none'"
+    tabindex="-1"
+    (click)="closeModal()"
+  >
     <div class="modal-dialog modal-lg" (click)="$event.stopPropagation()">
       <div class="modal-content">
         <div class="modal-header">
@@ -64,7 +76,14 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" (click)="closeModal()">Batal</button>
-          <button type="button" class="btn text-white fw-600" style="background:linear-gradient(90deg,#667eea,#764ba2)" (click)="submit()">{{ editingId ? 'Perbarui Kelas' : 'Tambah Kelas' }}</button>
+          <button
+            type="button"
+            class="btn text-white fw-600"
+            style="background: linear-gradient(90deg, #667eea, #764ba2)"
+            (click)="submit()"
+          >
+            {{ editingId ? 'Perbarui Kelas' : 'Tambah Kelas' }}
+          </button>
         </div>
       </div>
     </div>

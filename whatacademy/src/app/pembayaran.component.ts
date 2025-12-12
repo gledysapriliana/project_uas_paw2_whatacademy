@@ -15,7 +15,7 @@ interface Pembayaran {
   selector: 'app-pembayaran',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './pembayaran.component.html'
+  templateUrl: './pembayaran.component.html',
 })
 export class PembayaranComponent implements OnInit {
   pembayaranList: Pembayaran[] = [];

@@ -1,8 +1,11 @@
-<div class="p-4" style="max-width:700px;margin:0 auto">
+<div class="p-4" style="max-width: 700px; margin: 0 auto">
   <h1 class="mb-4">Profil Saya</h1>
   <div *ngIf="user; else noUser" class="card border-0 shadow-sm">
     <div class="card-body d-flex gap-4 align-items-start">
-      <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold" style="width:60px;height:60px;background:linear-gradient(90deg,#667eea,#764ba2);">
+      <div
+        class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold"
+        style="width: 60px; height: 60px; background: linear-gradient(90deg, #667eea, #764ba2)"
+      >
         {{ (user.fullName || user.username)[0] || 'U' }}
       </div>
       <div class="flex-grow-1">

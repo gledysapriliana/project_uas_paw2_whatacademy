@@ -9,7 +9,7 @@ import { ParticipantService } from './participant.service';
   selector: 'app-tambah-peserta',
   standalone: true,
   imports: [FormsModule, CommonModule],
-  templateUrl: './tambah-peserta.component.html'
+  templateUrl: './tambah-peserta.component.html',
 })
 export class TambahPesertaComponent {
   name = '';
@@ -38,7 +38,6 @@ export class TambahPesertaComponent {
       .addParticipant(this.name.trim(), this.email.trim(), this.phone.trim())
       .subscribe({
         next: (res) => {
-          // res.participant may exist for local fallback
           try {
             const p =
               res && res.participant
@@ -49,8 +48,12 @@ export class TambahPesertaComponent {
                     email: this.email.trim(),
                     phone: this.phone.trim(),
                   };
-            // ensure participant service also has the item for components reading 'participants' key
             this.participantService.add({ name: p.name, email: p.email, phone: p.phone });
+
+            // Sync both localStorage keys after adding
+            const current = JSON.parse(localStorage.getItem('whatacademy_participants') || '[]');
+            localStorage.setItem('participants', JSON.stringify(current));
+            localStorage.setItem('whatacademy_participants', JSON.stringify(current));
           } catch {}
 
           alert('✅ Peserta berhasil ditambahkan!');

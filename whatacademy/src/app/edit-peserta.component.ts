@@ -9,7 +9,6 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './edit-peserta.component.html',
-  styleUrls: ['./edit-peserta.component.css']
 })
 export class EditPesertaComponent implements OnInit {
   name = '';
@@ -58,7 +57,7 @@ export class EditPesertaComponent implements OnInit {
         this.initialLoading = false;
         alert('❌ ' + this.error);
         setTimeout(() => this.router.navigate(['/dashboard']), 1400);
-      }
+      },
     });
   }
 
@@ -69,23 +68,25 @@ export class EditPesertaComponent implements OnInit {
     }
     this.error = '';
     this.loading = true;
-    
-    this.apiService.updateParticipant(this.id, {
-      name: this.name.trim(),
-      email: this.email.trim(),
-      phone: this.phone.trim()
-    }).subscribe({
-      next: () => {
-        alert('✅ Peserta berhasil diperbarui!');
-        this.router.navigate(['/dashboard']);
-      },
-      error: (err: any) => {
-        const errMsg = err.error?.error || 'Gagal update peserta';
-        alert('❌ ' + errMsg);
-        this.error = errMsg;
-        this.loading = false;
-      }
-    });
+
+    this.apiService
+      .updateParticipant(this.id, {
+        name: this.name.trim(),
+        email: this.email.trim(),
+        phone: this.phone.trim(),
+      })
+      .subscribe({
+        next: () => {
+          alert('✅ Peserta berhasil diperbarui!');
+          this.router.navigate(['/dashboard']);
+        },
+        error: (err: any) => {
+          const errMsg = err.error?.error || 'Gagal update peserta';
+          alert('❌ ' + errMsg);
+          this.error = errMsg;
+          this.loading = false;
+        },
+      });
   }
 
   cancel() {

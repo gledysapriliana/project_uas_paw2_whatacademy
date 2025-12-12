@@ -1,12 +1,18 @@
 import { Component, signal, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './app.html',
-  styleUrls: ['./app.css'],
+
+  // Pilih salah satu:
+  // 1) Kalau kamu tidak punya app.css, COMMENT/HAPUS baris ini
+  // styleUrls: ['./app.css'],
+
+  // 2) Kalau mau tetap pakai, pastikan file src/app/app.css benar-benar ada
 })
 export class App implements OnInit {
   protected readonly title = signal('whatacademy');
@@ -18,7 +24,6 @@ export class App implements OnInit {
   }
 
   private initializeDefaultData(): void {
-    // Initialize default participants if none exist
     if (
       !localStorage.getItem('participants') &&
       !localStorage.getItem('whatacademy_participants')
@@ -31,7 +36,7 @@ export class App implements OnInit {
       localStorage.setItem('participants', JSON.stringify(participants));
       localStorage.setItem('whatacademy_participants', JSON.stringify(participants));
     }
-    // Initialize default classes if none exist
+
     if (!localStorage.getItem('kelas_list')) {
       const classes = [
         {
@@ -61,7 +66,7 @@ export class App implements OnInit {
       ];
       localStorage.setItem('kelas_list', JSON.stringify(classes));
     }
-    // Initialize default payments if none exist
+
     if (!localStorage.getItem('pembayaran_list')) {
       const payments = [
         {

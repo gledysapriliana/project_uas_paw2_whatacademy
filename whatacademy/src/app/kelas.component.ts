@@ -15,7 +15,7 @@ interface Kelas {
   selector: 'app-kelas',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './kelas.component.html'
+  templateUrl: './kelas.component.html',
 })
 export class KelasComponent implements OnInit {
   kelasGroups: { level: string; kelas: Kelas[] }[] = [];

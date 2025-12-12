@@ -7,7 +7,7 @@ import { ParticipantService } from './participant.service';
   selector: 'app-dashboard',
   standalone: true,
   imports: [CommonModule, RouterLink],
-  templateUrl: './dashboard.component.html'
+  templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent {
   constructor(private participantService: ParticipantService) {}
@@ -22,8 +22,16 @@ export class DashboardComponent {
   }
 
   getTotalParticipants() {
-    const list =
-      this.readLocalArray('participants') || this.readLocalArray('whatacademy_participants');
+    // Read from both keys and sync them
+    let list = this.readLocalArray('participants');
+    if (!list || list.length === 0) {
+      list = this.readLocalArray('whatacademy_participants');
+    }
+    // Keep both keys in sync
+    if (list && list.length > 0) {
+      localStorage.setItem('participants', JSON.stringify(list));
+      localStorage.setItem('whatacademy_participants', JSON.stringify(list));
+    }
     return list.length || 0;
   }
 

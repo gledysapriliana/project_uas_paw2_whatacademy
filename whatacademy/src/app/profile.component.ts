@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
   selector: 'app-profile',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './profile.component.html'
+  templateUrl: './profile.component.html',
 })
 export class ProfileComponent {
   constructor(private router: Router) {}

@@ -8,7 +8,7 @@ import { ApiService } from './api.service';
   selector: 'app-register',
   standalone: true,
   imports: [FormsModule, CommonModule],
-  templateUrl: './register.component.html'
+  templateUrl: './register.component.html',
 })
 export class RegisterComponent {
   username = '';

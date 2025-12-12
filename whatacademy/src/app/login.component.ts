@@ -8,7 +8,7 @@ import { ApiService } from './api.service';
   selector: 'app-login',
   standalone: true,
   imports: [FormsModule, CommonModule],
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
 })
 export class LoginComponent {
   username = '';

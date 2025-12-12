@@ -1,5 +1,8 @@
-<div class="min-vh-100 d-flex align-items-center justify-content-center p-3" style="background:linear-gradient(135deg,#667eea,#764ba2)">
-  <div class="bg-white p-4 rounded-3 shadow-lg" style="width:100%;max-width:420px">
+<div
+  class="min-vh-100 d-flex align-items-center justify-content-center p-3"
+  style="background: linear-gradient(135deg, #667eea, #764ba2)"
+>
+  <div class="bg-white p-4 rounded-3 shadow-lg" style="width: 100%; max-width: 420px">
     <h1 class="text-center mb-2">Login</h1>
     <p class="text-center text-muted mb-4 small">Masuk ke WhatAcademy</p>
 
@@ -15,9 +18,21 @@
         <input type="password" class="form-control" [(ngModel)]="password" name="password" />
       </div>
 
-      <button type="submit" class="btn w-100 text-white fw-600" style="background:linear-gradient(90deg,#667eea,#764ba2)" [disabled]="loading">Login</button>
+      <button
+        type="submit"
+        class="btn w-100 text-white fw-600"
+        style="background: linear-gradient(90deg, #667eea, #764ba2)"
+        [disabled]="loading"
+      >
+        Login
+      </button>
     </form>
 
-    <p class="text-center mt-4 small">Belum punya akun? <a routerLink="/register" class="fw-600" style="color:#667eea;text-decoration:none">Daftar</a></p>
+    <p class="text-center mt-4 small">
+      Belum punya akun?
+      <a routerLink="/register" class="fw-600" style="color: #667eea; text-decoration: none"
+        >Daftar</a
+      >
+    </p>
   </div>
 </div>
