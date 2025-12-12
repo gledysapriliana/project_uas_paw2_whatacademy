@@ -1,49 +1,42 @@
-<div class="dashboard">
-  <section class="hero">
-    <div class="hero-left">
-      <h1>English Course</h1>
-      <p class="subtitle">Kelola data peserta kursus bahasa Inggris dengan mudah dan efisien. Lacak progress dan informasi setiap peserta.</p>
-    </div>
-    <div class="hero-right">
-      <button class="primary" *ngIf="isAdmin && participants.length > 0" (click)="goAdd()">+ Tambah Peserta</button>
-    </div>
-  </section>
+<div>
+  <h1 class="mb-2">Dashboard</h1>
+  <p class="text-muted">Ringkasan singkat sistem.</p>
 
-  <section class="controls">
-    <div class="search">
-      <input placeholder="Cari nama atau email..." />
-    </div>
-    <div class="filters">
-      <select><option>Semua</option></select>
-      <select><option>Semua Status</option></select>
-    </div>
-  </section>
-
-  <section class="content">
-    <div *ngIf="participants.length === 0" class="empty">
-      <div class="empty-icon">📚</div>
-      <h3>Belum ada peserta</h3>
-      <p>Mulai dengan menambahkan peserta baru</p>
-      <button class="primary large" *ngIf="isAdmin" (click)="goAdd()">+ Tambah Peserta Pertama</button>
+  <div class="row g-4 mt-3">
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+          <div class="text-muted mb-2">Peserta</div>
+          <div class="fs-4 fw-bold">{{ getTotalParticipants() }}</div>
+          <a routerLink="/peserta" class="text-decoration-none fw-600 small">Lihat Data Peserta</a>
+        </div>
+      </div>
     </div>
 
-    <div *ngIf="participants.length > 0" class="list-wrap">
-      <table class="list">
-        <thead>
-          <tr><th>Nama</th><th>Email</th><th>Telepon</th><th *ngIf="isAdmin">Aksi</th></tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let p of participants">
-            <td>{{ p.name }}</td>
-            <td>{{ p.email }}</td>
-            <td>{{ p.phone }}</td>
-            <td *ngIf="isAdmin" class="actions-cell">
-              <button class="ghost" (click)="edit(p.id)">Edit</button>
-              <button class="danger" (click)="remove(p.id)">Hapus</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+          <div class="text-muted mb-2">Kelas</div>
+          <div class="fs-4 fw-bold">{{ getTotalClasses() }}</div>
+          <a routerLink="/kelas" class="text-decoration-none fw-600 small">Kelola Kelas</a>
+        </div>
+      </div>
     </div>
-  </section>
+
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow-sm">
+        <div class="card-body">
+          <div class="text-muted mb-2">Pembayaran</div>
+          <div class="fs-4 fw-bold">{{ getTotalPayments() }}</div>
+          <a routerLink="/pembayaran" class="text-decoration-none fw-600 small">Kelola Pembayaran</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex gap-3 flex-wrap mt-5">
+    <a routerLink="/tambah-peserta" class="btn text-white fw-600" style="background:linear-gradient(90deg,#667eea,#764ba2)">+ Tambah Peserta</a>
+    <a routerLink="/kelas" class="btn text-white fw-600" style="background:linear-gradient(90deg,#667eea,#764ba2)">Kelola Kelas</a>
+    <a routerLink="/pembayaran" class="btn text-white fw-600" style="background:linear-gradient(90deg,#667eea,#764ba2)">Kelola Pembayaran</a>
+  </div>
 </div>

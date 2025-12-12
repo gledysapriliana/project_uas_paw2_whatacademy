@@ -1,16 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthService } from './auth.service';
 import { ApiService } from './api.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterLink],
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  imports: [FormsModule, CommonModule],
+  templateUrl: './login.component.html'
 })
 export class LoginComponent {
   username = '';
@@ -18,46 +16,28 @@ export class LoginComponent {
   error = '';
   loading = false;
 
-  constructor(
-    private router: Router,
-    private authService: AuthService,
-    private apiService: ApiService
-  ) {}
+  constructor(private api: ApiService, private router: Router) {}
 
-  ngOnInit() {
-    if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/dashboard']);
-    }
-  }
-
-  login() {
+  public submit(): void {
     this.error = '';
+    if (!this.username.trim() || !this.password) {
+      this.error = 'Username dan password harus diisi';
+      return;
+    }
     this.loading = true;
-
-    if (!this.username.trim()) {
-      this.error = 'Username tidak boleh kosong';
-      this.loading = false;
-      return;
-    }
-
-    if (!this.password.trim()) {
-      this.error = 'Password tidak boleh kosong';
-      this.loading = false;
-      return;
-    }
-
-    this.apiService.login(this.username.trim(), this.password.trim()).subscribe({
-      next: (response) => {
-        alert('✅ Login berhasil!');
-        this.authService.setCurrentUser(response.user);
-        this.router.navigate(['/dashboard']);
+    this.api.login(this.username.trim(), this.password).subscribe({
+      next: (res) => {
+        // Store user session
+        localStorage.setItem('currentUser', res.user.username);
+        localStorage.setItem('currentUserData', JSON.stringify(res.user));
         this.loading = false;
+        // Navigate via router without reloading the page
+        this.router.navigate(['/dashboard']);
       },
       error: (err) => {
-        alert('❌ ' + (err.error?.error || 'Login gagal!'));
-        this.error = err.error?.error || 'Login gagal!';
         this.loading = false;
-      }
+        this.error = err.error?.error || 'Login gagal';
+      },
     });
   }
 }

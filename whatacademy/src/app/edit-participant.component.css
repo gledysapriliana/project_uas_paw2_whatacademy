@@ -1,0 +1,45 @@
+.edit-page {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+.form-group {
+  margin-bottom: 1rem;
+}
+label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+}
+input {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+.form-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+.btn-cancel {
+  background: #ccc;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+}
+.btn-save {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+}
+.alert-error {
+  color: #b91c1c;
+  margin-bottom: 1rem;
+}
+.alert-success {
+  color: #065f46;
+  margin-bottom: 1rem;
+}

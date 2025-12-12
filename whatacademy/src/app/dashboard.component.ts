@@ -1,84 +1,39 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { AuthService } from './auth.service';
-import { ApiService } from './api.service';
-
-export interface Participant {
-  id: string;
-  name: string;
-  email?: string;
-  phone?: string;
-}
+import { RouterLink } from '@angular/router';
+import { ParticipantService } from './participant.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  imports: [CommonModule, RouterLink],
+  templateUrl: './dashboard.component.html'
 })
-export class DashboardComponent implements OnInit {
-  participants: Participant[] = [];
-  currentUser = '';
-  isAdmin = false;
-  loading = false;
+export class DashboardComponent {
+  constructor(private participantService: ParticipantService) {}
 
-  constructor(
-    private authService: AuthService,
-    private apiService: ApiService,
-    private router: Router
-  ) {}
-
-  ngOnInit() {
-    if (!this.authService.isLoggedIn()) {
-      this.router.navigate(['/login']);
-      return;
+  private readLocalArray(key: string): any[] {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
     }
-    
-    const user = this.authService.getCurrentUser();
-    this.currentUser = user?.fullName || '';
-    this.isAdmin = this.authService.isAdmin();
-    this.load();
   }
 
-  load() {
-    this.loading = true;
-    this.apiService.getParticipants().subscribe({
-      next: (data) => {
-        this.participants = data;
-        this.loading = false;
-      },
-      error: () => {
-        this.loading = false;
-      }
-    });
+  getTotalParticipants() {
+    const list =
+      this.readLocalArray('participants') || this.readLocalArray('whatacademy_participants');
+    return list.length || 0;
   }
 
-  remove(id: string) {
-    if (!confirm('Hapus peserta ini?')) return;
-    this.apiService.deleteParticipant(id).subscribe({
-      next: () => {
-        alert('✅ Peserta berhasil dihapus!');
-        this.load();
-      },
-      error: (err) => {
-        const errMsg = err.error?.error || 'Gagal menghapus peserta';
-        alert('❌ ' + errMsg);
-      }
-    });
+  getTotalClasses() {
+    const list = this.readLocalArray('kelas_list');
+    return list.length || 0;
   }
 
-  edit(id: string) {
-    this.router.navigate(['/edit-peserta', id]);
-  }
-
-  goAdd() {
-    this.router.navigate(['/tambah-peserta']);
-  }
-
-  logout() {
-    this.authService.logout();
-    this.router.navigate(['/login']);
+  getTotalPayments() {
+    const list = this.readLocalArray('pembayaran_list');
+    return list.length || 0;
   }
 }

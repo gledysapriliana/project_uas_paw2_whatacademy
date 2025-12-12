@@ -1,0 +1,90 @@
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.search-input {
+  flex: 1;
+  padding: 0.6rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.btn-add {
+  padding: 0.6rem 1rem;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.participants-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.participants-table th,
+.participants-table td {
+  padding: 0.9rem;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+.participants-table thead {
+  background: #f7f7f7;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+.btn-edit {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.7rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.btn-delete {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.7rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.no-data {
+  padding: 2rem;
+  text-align: center;
+  color: #888;
+}
+
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .btn-add {
+    width: 100%;
+  }
+}

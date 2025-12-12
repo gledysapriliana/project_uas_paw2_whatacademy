@@ -1,25 +1,23 @@
-<div class="login-container">
-  <h2>Masuk — WhatAcademy</h2>
-  
-  <div *ngIf="error" style="color:#c33;margin-bottom:1rem;padding:0.75rem;background:#fee;border:1px solid #fcc;border-radius:4px;">
-    {{ error }}
+<div class="min-vh-100 d-flex align-items-center justify-content-center p-3" style="background:linear-gradient(135deg,#667eea,#764ba2)">
+  <div class="bg-white p-4 rounded-3 shadow-lg" style="width:100%;max-width:420px">
+    <h1 class="text-center mb-2">Login</h1>
+    <p class="text-center text-muted mb-4 small">Masuk ke WhatAcademy</p>
+
+    <div *ngIf="error" class="alert alert-danger small">{{ error }}</div>
+
+    <form (ngSubmit)="submit()">
+      <div class="mb-3">
+        <label class="form-label fw-600">Username</label>
+        <input class="form-control" [(ngModel)]="username" name="username" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-600">Password</label>
+        <input type="password" class="form-control" [(ngModel)]="password" name="password" />
+      </div>
+
+      <button type="submit" class="btn w-100 text-white fw-600" style="background:linear-gradient(90deg,#667eea,#764ba2)" [disabled]="loading">Login</button>
+    </form>
+
+    <p class="text-center mt-4 small">Belum punya akun? <a routerLink="/register" class="fw-600" style="color:#667eea;text-decoration:none">Daftar</a></p>
   </div>
-
-  <form (ngSubmit)="login()" #f="ngForm">
-    <label>
-      Nama pengguna
-      <input name="username" [(ngModel)]="username" required />
-    </label>
-
-    <label>
-      Kata sandi
-      <input name="password" type="password" [(ngModel)]="password" />
-    </label>
-
-    <button type="submit">Masuk</button>
-  </form>
-  
-  <p style="margin-top:1rem;text-align:center;">
-    Belum punya akun? <a routerLink="/register" style="color:#667eea;text-decoration:none;font-weight:600;">Daftar di sini</a>
-  </p>
 </div>

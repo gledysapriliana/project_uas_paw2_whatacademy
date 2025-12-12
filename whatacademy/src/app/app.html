@@ -1,41 +1,47 @@
-<style>
-  .app-shell { display: flex; min-height: 100vh; font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
-  .sidebar { width: 240px; background: #061428; color: #fff; padding: 2rem 1rem; box-shadow: 2px 0 8px rgba(6,20,40,0.12); }
-  .brand { display:flex; gap:12px; align-items:center; margin-bottom:2rem }
-  .brand .logo { width:44px; height:44px; background: linear-gradient(135deg,#4f46e5,#7c3aed); border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:700 }
-  .brand h2{ margin:0; font-size:1.1rem; font-weight:700 }
-  .nav-list{ display:flex; flex-direction:column; gap:8px; margin-top:12px }
-  .nav-list a{ color: rgba(255,255,255,0.92); text-decoration:none; padding:0.6rem 0.6rem; border-radius:8px; display:flex; gap:10px; align-items:center }
-  .nav-list a.active, .nav-list a:hover{ background: rgba(255,255,255,0.04) }
-  .nav-list .label{ font-size:0.95rem }
-  .main { flex:1; background:#f6f8fb; padding:2rem 2.5rem; overflow:auto }
-  .content-wrap{ max-width:1200px; margin:0 auto }
-  @media (max-width: 800px){ .sidebar{ display:none } .main{ padding:1rem } }
-</style>
-
-<div class="app-shell">
-  <aside class="sidebar">
-    <div class="brand">
-      <div class="logo">EA</div>
+<div class="d-flex" style="min-height:100vh;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto;">
+  <aside class="bg-dark text-white p-4" style="width:240px;box-shadow:2px 0 8px rgba(6,20,40,0.12);overflow-y:auto;">
+    <div class="d-flex gap-3 align-items-center mb-3">
+      <div class="rounded p-2" style="width:44px;height:44px;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;">EA</div>
       <div>
-        <h2>English Course</h2>
-        <div style="font-size:0.8rem; opacity:0.8">Management System</div>
+        <h5 class="mb-0 fw-bold">English Course</h5>
+        <small class="opacity-75">Management System</small>
       </div>
     </div>
 
-    <nav class="nav-list">
-      <a routerLink="/dashboard" routerLinkActive="active"><span>📊</span><span class="label">Dashboard</span></a>
-      <a routerLink="/dashboard" routerLinkActive="active"><span>👥</span><span class="label">Data Peserta</span></a>
-      <a routerLink="/kelas" routerLinkActive="active"><span>🎓</span><span class="label">Kelas</span></a>
-      <a routerLink="/pembayaran" routerLinkActive="active"><span>💳</span><span class="label">Pembayaran</span></a>
-      <a routerLink="/register"><span>📝</span><span class="label">Pendaftaran</span></a>
+    <div *ngIf="currentUserData" class="d-flex gap-2 align-items-center p-2 rounded mb-3">
+      <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold" style="width:40px;height:40px;background:linear-gradient(90deg,#667eea,#764ba2);">
+        {{ (currentUserData.fullName || currentUserData.username)[0] || 'U' }}
+      </div>
+      <div class="flex-grow-1">
+        <div class="fw-bold small">{{ currentUserData.fullName || currentUserData.username }}</div>
+        <a routerLink="/profile" class="text-decoration-none" style="color:rgba(255,255,255,0.9);font-size:0.85rem;">Lihat Profil</a>
+      </div>
+      <button (click)="logout()" class="btn btn-sm border" style="border-color:rgba(255,255,255,0.12);color:white;">Logout</button>
+    </div>
+
+    <nav class="d-flex flex-column gap-2 mt-3">
+      <a routerLink="/dashboard" routerLinkActive="active" class="d-flex gap-2 align-items-center text-white text-decoration-none p-2 rounded" style="color:rgba(255,255,255,0.92)!important;">
+        <span>📊</span><span class="small">Dashboard</span>
+      </a>
+      <a routerLink="/peserta" routerLinkActive="active" class="d-flex gap-2 align-items-center text-white text-decoration-none p-2 rounded" style="color:rgba(255,255,255,0.92)!important;">
+        <span>👥</span><span class="small">Data Peserta</span>
+      </a>
+      <a routerLink="/kelas" routerLinkActive="active" class="d-flex gap-2 align-items-center text-white text-decoration-none p-2 rounded" style="color:rgba(255,255,255,0.92)!important;">
+        <span>🎓</span><span class="small">Kelas</span>
+      </a>
+      <a routerLink="/pembayaran" routerLinkActive="active" class="d-flex gap-2 align-items-center text-white text-decoration-none p-2 rounded" style="color:rgba(255,255,255,0.92)!important;">
+        <span>💳</span><span class="small">Pembayaran</span>
+      </a>
+      <a routerLink="/register" class="d-flex gap-2 align-items-center text-white text-decoration-none p-2 rounded">
+        <span>📝</span><span class="small">Pendaftaran</span>
+      </a>
     </nav>
 
-    <div style="margin-top:auto;font-size:0.85rem;opacity:0.7;padding-top:1.5rem">© 2024 English Course</div>
+    <div class="mt-auto pt-4 small opacity-75">© 2024 English Course</div>
   </aside>
 
-  <main class="main">
-    <div class="content-wrap">
+  <main class="flex-grow-1 bg-light p-5" style="overflow:auto;">
+    <div class="mx-auto" style="max-width:1200px;">
       <router-outlet></router-outlet>
     </div>
   </main>

@@ -1,91 +1,40 @@
-<div class="register-container">
-  <div class="register-card">
-    <h1>Daftar Akun Baru</h1>
-    <p class="subtitle">Bergabunglah dengan WhatAcademy</p>
+<div class="min-vh-100 d-flex align-items-center justify-content-center p-3" style="background:linear-gradient(135deg,#667eea,#764ba2)">
+  <div class="bg-white p-4 rounded-3 shadow-lg" style="width:100%;max-width:420px">
+    <h1 class="text-center mb-2">Daftar Akun Baru</h1>
+    <p class="text-center text-muted mb-4 small">Bergabunglah dengan WhatAcademy</p>
 
-    <div *ngIf="errorMessage" class="alert alert-error">
-      {{ errorMessage }}
-    </div>
-
-    <div *ngIf="successMessage" class="alert alert-success">
-      {{ successMessage }}
-    </div>
+    <div *ngIf="errorMessage" class="alert alert-danger small">{{ errorMessage }}</div>
+    <div *ngIf="successMessage" class="alert alert-success small">{{ successMessage }}</div>
 
     <form (ngSubmit)="register()">
-      <div class="form-group">
-        <label for="fullName">Nama Lengkap</label>
-        <input
-          type="text"
-          id="fullName"
-          [(ngModel)]="fullName"
-          name="fullName"
-          placeholder="Masukkan nama lengkap"
-          required
-        />
+      <div class="mb-3">
+        <label class="form-label fw-600">Nama Lengkap</label>
+        <input class="form-control" [(ngModel)]="fullName" name="fullName" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-600">Username</label>
+        <input class="form-control" [(ngModel)]="username" name="username" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-600">Email</label>
+        <input class="form-control" type="email" [(ngModel)]="email" name="email" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-600">Nomor Telepon</label>
+        <input class="form-control" type="tel" [(ngModel)]="phone" name="phone" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-600">Password</label>
+        <input class="form-control" type="password" [(ngModel)]="password" name="password" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-600">Konfirmasi Password</label>
+        <input class="form-control" type="password" [(ngModel)]="confirmPassword" name="confirmPassword" />
       </div>
 
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input
-          type="text"
-          id="username"
-          [(ngModel)]="username"
-          name="username"
-          placeholder="Masukkan username"
-          required
-        />
-      </div>
-
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          [(ngModel)]="email"
-          name="email"
-          placeholder="Masukkan email"
-          required
-        />
-      </div>
-
-      <div class="form-group">
-        <label for="phone">Nomor Telepon</label>
-        <input
-          type="tel"
-          id="phone"
-          [(ngModel)]="phone"
-          name="phone"
-          placeholder="Masukkan nomor telepon"
-        />
-      </div>
-
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          [(ngModel)]="password"
-          name="password"
-          placeholder="Masukkan password (min 6 karakter)"
-          required
-        />
-      </div>
-
-      <div class="form-group">
-        <label for="confirmPassword">Konfirmasi Password</label>
-        <input
-          type="password"
-          id="confirmPassword"
-          [(ngModel)]="confirmPassword"
-          name="confirmPassword"
-          placeholder="Konfirmasi password"
-          required
-        />
-      </div>
-
-      <button type="submit" class="btn-submit">Daftar</button>
+      <button type="submit" class="btn w-100 text-white fw-600" style="background:linear-gradient(90deg,#667eea,#764ba2)">Daftar</button>
     </form>
 
-    <p class="login-link">Sudah punya akun? <a routerLink="/login">Login di sini</a></p>
+    <p class="text-center mt-4 small">Sudah punya akun? <a routerLink="/login" class="fw-600" style="color:#667eea;text-decoration:none">Login di sini</a></p>
   </div>
 </div>

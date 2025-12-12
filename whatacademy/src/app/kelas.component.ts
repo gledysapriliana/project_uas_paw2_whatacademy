@@ -15,8 +15,7 @@ interface Kelas {
   selector: 'app-kelas',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './kelas.component.html',
-  styleUrls: ['./kelas.component.css']
+  templateUrl: './kelas.component.html'
 })
 export class KelasComponent implements OnInit {
   kelasGroups: { level: string; kelas: Kelas[] }[] = [];
@@ -27,6 +26,8 @@ export class KelasComponent implements OnInit {
   instruktur = '';
   kapasitas = '';
   error = '';
+
+  editingId: string | null = null;
 
   ngOnInit() {
     this.loadData();
@@ -46,7 +47,7 @@ export class KelasComponent implements OnInit {
         level: 'Beginner',
         jadwal: 'Senin & Rabu, 09:00 - 11:00',
         instruktur: 'Mr. John Smith',
-        kapasitas: 15
+        kapasitas: 15,
       },
       {
         id: '2',
@@ -54,7 +55,7 @@ export class KelasComponent implements OnInit {
         level: 'Beginner',
         jadwal: 'Selasa & Kamis, 09:00 - 11:00',
         instruktur: 'Ms. Emily White',
-        kapasitas: 15
+        kapasitas: 15,
       },
       {
         id: '3',
@@ -62,28 +63,40 @@ export class KelasComponent implements OnInit {
         level: 'Intermediate',
         jadwal: 'Selasa & Kamis, 13:00 - 15:00',
         instruktur: 'Ms. Sarah Johnson',
-        kapasitas: 12
-      }
+        kapasitas: 12,
+      },
     ];
   }
 
   groupByLevel(kelasList: Kelas[]) {
     const grouped: { [key: string]: Kelas[] } = {};
-    kelasList.forEach(k => {
+    kelasList.forEach((k) => {
       if (!grouped[k.level]) grouped[k.level] = [];
       grouped[k.level].push(k);
     });
-    this.kelasGroups = Object.keys(grouped).map(level => ({ level, kelas: grouped[level] }));
+    this.kelasGroups = Object.keys(grouped).map((level) => ({ level, kelas: grouped[level] }));
   }
 
-  openModal() {
+  openModal(edit?: Kelas) {
     this.showModal = true;
-    this.resetForm();
+    if (edit) {
+      this.editingId = edit.id;
+      this.namaKelas = edit.namaKelas;
+      this.level = edit.level;
+      this.jadwal = edit.jadwal;
+      this.instruktur = edit.instruktur;
+      this.kapasitas = String(edit.kapasitas);
+      this.error = '';
+    } else {
+      this.editingId = null;
+      this.resetForm();
+    }
   }
 
   closeModal() {
     this.showModal = false;
     this.resetForm();
+    this.editingId = null;
   }
 
   resetForm() {
@@ -107,19 +120,39 @@ export class KelasComponent implements OnInit {
 
     const stored = localStorage.getItem('kelas_list');
     const kelasList: Kelas[] = stored ? JSON.parse(stored) : this.getDefaultClasses();
-    
+
+    if (this.editingId) {
+      const idx = kelasList.findIndex((k) => k.id === this.editingId);
+      if (idx !== -1) {
+        kelasList[idx] = {
+          id: this.editingId,
+          namaKelas: this.namaKelas.trim(),
+          level: this.level,
+          jadwal: this.jadwal.trim(),
+          instruktur: this.instruktur.trim(),
+          kapasitas: parseInt(this.kapasitas),
+        };
+        localStorage.setItem('kelas_list', JSON.stringify(kelasList));
+        alert('✅ Kelas berhasil diperbarui!');
+        this.loadData();
+        this.closeModal();
+        return;
+      }
+      this.error = 'Kelas yang akan diedit tidak ditemukan';
+      return;
+    }
+
     const newKelas: Kelas = {
       id: Date.now().toString(),
       namaKelas: this.namaKelas.trim(),
       level: this.level,
       jadwal: this.jadwal.trim(),
       instruktur: this.instruktur.trim(),
-      kapasitas: parseInt(this.kapasitas)
+      kapasitas: parseInt(this.kapasitas),
     };
-
     kelasList.push(newKelas);
     localStorage.setItem('kelas_list', JSON.stringify(kelasList));
-    
+
     alert('✅ Kelas berhasil ditambahkan!');
     this.loadData();
     this.closeModal();
@@ -129,7 +162,7 @@ export class KelasComponent implements OnInit {
     if (!confirm('Hapus kelas ini?')) return;
     const stored = localStorage.getItem('kelas_list');
     const kelasList: Kelas[] = stored ? JSON.parse(stored) : [];
-    const filtered = kelasList.filter(k => k.id !== id);
+    const filtered = kelasList.filter((k) => k.id !== id);
     localStorage.setItem('kelas_list', JSON.stringify(filtered));
     alert('✅ Kelas berhasil dihapus!');
     this.loadData();

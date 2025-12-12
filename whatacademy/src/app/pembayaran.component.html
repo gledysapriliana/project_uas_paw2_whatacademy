@@ -1,30 +1,57 @@
-<div class="page">
-  <div class="page-header">
+<div class="p-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-      <h1>Pembayaran</h1>
-      <p>Kelola status pembayaran peserta di sini.</p>
+      <h1 class="mb-1">Pembayaran</h1>
+      <p class="text-muted">Kelola status pembayaran peserta di sini.</p>
     </div>
-    <button class="primary-btn" (click)="openModal()">+ Catat Pembayaran</button>
+    <button
+      class="btn text-white fw-600"
+      style="background:linear-gradient(90deg,#667eea,#764ba2)"
+      (click)="openModal()"
+    >
+      + Catat Pembayaran
+    </button>
   </div>
 
-  <div class="stats">
-    <div class="stat-card">
-      <div class="stat-icon">💼</div>
-      <div><div class="stat-label">Total Peserta</div><div class="stat-value">{{ getTotalPeserta() }}</div></div>
+  <div class="row g-3 mb-5">
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body d-flex gap-3 align-items-center">
+          <div style="font-size:2rem">💼</div>
+          <div>
+            <div class="text-muted small">Total Peserta</div>
+            <div class="fs-5 fw-bold">{{ getTotalPeserta() }}</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="stat-card">
-      <div class="stat-icon">✅</div>
-      <div><div class="stat-label">Lunas</div><div class="stat-value">{{ getLunasCount() }}</div></div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body d-flex gap-3 align-items-center">
+          <div style="font-size:2rem">✅</div>
+          <div>
+            <div class="text-muted small">Lunas</div>
+            <div class="fs-5 fw-bold">{{ getLunasCount() }}</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="stat-card">
-      <div class="stat-icon">⏱️</div>
-      <div><div class="stat-label">Belum Lunas</div><div class="stat-value">{{ getBelumLunasCount() }}</div></div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body d-flex gap-3 align-items-center">
+          <div style="font-size:2rem">⏱️</div>
+          <div>
+            <div class="text-muted small">Belum Lunas</div>
+            <div class="fs-5 fw-bold">{{ getBelumLunasCount() }}</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="table-wrap">
-    <table class="table">
-      <thead>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead class="table-light">
         <tr>
           <th>Peserta</th>
           <th>Metode</th>
@@ -37,57 +64,109 @@
         <tr *ngFor="let p of pembayaranList">
           <td><strong>{{ p.peserta }}</strong></td>
           <td>{{ p.metode }}</td>
-          <td><span class="badge" [ngClass]="p.status === 'Lunas' ? 'lunas' : 'belum'">{{ p.status }}</span></td>
-          <td>{{ formatRupiah(p.jumlah) }}<br><span class="sub">{{ p.tanggal }}</span></td>
-          <td><button class="btn-delete" (click)="deletePembayaran(p.id)">🗑️ Hapus</button></td>
+          <td>
+            <span
+              class="badge"
+              [ngClass]="p.status === 'Lunas' ? 'bg-success' : 'bg-danger'"
+              >{{ p.status }}</span
+            >
+          </td>
+          <td>
+            {{ formatRupiah(p.jumlah) }}<br />
+            <small class="text-muted">{{ p.tanggal }}</small>
+          </td>
+          <td>
+            <button
+              class="btn btn-sm btn-primary me-2"
+              (click)="openModal(p)"
+            >
+              ✏️ Edit
+            </button>
+            <button
+              class="btn btn-sm btn-danger"
+              (click)="deletePembayaran(p.id)"
+            >
+              🗑️ Hapus
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <!-- Modal -->
-  <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
-    <div class="modal-card" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h2>Catat Pembayaran</h2>
-        <button class="close-btn" (click)="closeModal()">✕</button>
+  <div
+    class="modal"
+    [class.show]="showModal"
+    [style.display]="showModal ? 'block' : 'none'"
+    tabindex="-1"
+    (click)="closeModal()"
+  >
+    <div class="modal-dialog modal-lg" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            {{ editingId ? 'Edit Pembayaran' : 'Catat Pembayaran' }}
+          </h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+          <form>
+            <div class="mb-3">
+              <label class="form-label">Peserta</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="peserta"
+                name="peserta"
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Jumlah (Rp)</label>
+              <input
+                type="number"
+                class="form-control"
+                [(ngModel)]="jumlah"
+                name="jumlah"
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Metode Pembayaran</label>
+              <select class="form-select" [(ngModel)]="metode" name="metode">
+                <option value="Transfer Bank">Transfer Bank</option>
+                <option value="E-Wallet">E-Wallet</option>
+                <option value="Cash">Cash</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Status</label>
+              <select class="form-select" [(ngModel)]="status" name="status">
+                <option value="Lunas">Lunas</option>
+                <option value="Belum Lunas">Belum Lunas</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">
+            Batal
+          </button>
+          <button
+            type="button"
+            class="btn text-white fw-600"
+            style="background:linear-gradient(90deg,#667eea,#764ba2)"
+            (click)="submit()"
+          >
+            {{ editingId ? 'Perbarui' : 'Simpan' }}
+          </button>
+        </div>
       </div>
-
-      <div *ngIf="error" class="error-msg">❌ {{ error }}</div>
-
-      <form (ngSubmit)="submit()" class="modal-form">
-        <div class="form-group">
-          <label>Peserta</label>
-          <input type="text" [(ngModel)]="peserta" name="peserta" placeholder="Nama peserta..." required />
-        </div>
-
-        <div class="form-group">
-          <label>Jumlah (Rp)</label>
-          <input type="number" [(ngModel)]="jumlah" name="jumlah" placeholder="1500000" required />
-        </div>
-
-        <div class="form-group">
-          <label>Metode Pembayaran</label>
-          <select [(ngModel)]="metode" name="metode" required>
-            <option value="Transfer Bank">Transfer Bank</option>
-            <option value="E-Wallet">E-Wallet</option>
-            <option value="Cash">Cash</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Status</label>
-          <select [(ngModel)]="status" name="status" required>
-            <option value="Lunas">Lunas</option>
-            <option value="Belum Lunas">Belum Lunas</option>
-          </select>
-        </div>
-
-        <div class="form-actions">
-          <button type="button" class="btn-cancel" (click)="closeModal()">Batal</button>
-          <button type="submit" class="btn-submit">Simpan</button>
-        </div>
-      </form>
     </div>
   </div>
+  <div
+    class="modal-backdrop fade"
+    [class.show]="showModal"
+    *ngIf="showModal"
+  ></div>
 </div>

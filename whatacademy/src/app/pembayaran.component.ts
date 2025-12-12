@@ -15,8 +15,7 @@ interface Pembayaran {
   selector: 'app-pembayaran',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './pembayaran.component.html',
-  styleUrls: ['./pembayaran.component.css']
+  templateUrl: './pembayaran.component.html'
 })
 export class PembayaranComponent implements OnInit {
   pembayaranList: Pembayaran[] = [];
@@ -26,6 +25,8 @@ export class PembayaranComponent implements OnInit {
   metode = 'Transfer Bank';
   status = 'Lunas';
   error = '';
+
+  editingId: string | null = null;
 
   ngOnInit() {
     this.loadData();
@@ -44,7 +45,7 @@ export class PembayaranComponent implements OnInit {
         jumlah: 1500000,
         metode: 'Transfer Bank',
         status: 'Lunas',
-        tanggal: '2024-01-15'
+        tanggal: '2024-01-15',
       },
       {
         id: '2',
@@ -52,7 +53,7 @@ export class PembayaranComponent implements OnInit {
         jumlah: 2000000,
         metode: 'E-Wallet',
         status: 'Lunas',
-        tanggal: '2024-01-20'
+        tanggal: '2024-01-20',
       },
       {
         id: '3',
@@ -60,19 +61,30 @@ export class PembayaranComponent implements OnInit {
         jumlah: 1250000,
         metode: 'Cash',
         status: 'Belum Lunas',
-        tanggal: '2024-02-01'
-      }
+        tanggal: '2024-02-01',
+      },
     ];
   }
 
-  openModal() {
+  openModal(edit?: Pembayaran) {
     this.showModal = true;
-    this.resetForm();
+    if (edit) {
+      this.editingId = edit.id;
+      this.peserta = edit.peserta;
+      this.jumlah = String(edit.jumlah);
+      this.metode = edit.metode;
+      this.status = edit.status;
+      this.error = '';
+    } else {
+      this.editingId = null;
+      this.resetForm();
+    }
   }
 
   closeModal() {
     this.showModal = false;
     this.resetForm();
+    this.editingId = null;
   }
 
   resetForm() {
@@ -93,18 +105,41 @@ export class PembayaranComponent implements OnInit {
       return;
     }
 
+    const stored = localStorage.getItem('pembayaran_list');
+    const list: Pembayaran[] = stored ? JSON.parse(stored) : this.getDefaultPayments();
+
+    if (this.editingId) {
+      const idx = list.findIndex((p) => p.id === this.editingId);
+      if (idx !== -1) {
+        list[idx] = {
+          id: this.editingId,
+          peserta: this.peserta.trim(),
+          jumlah: parseInt(this.jumlah),
+          metode: this.metode,
+          status: this.status,
+          tanggal: new Date().toISOString().split('T')[0],
+        };
+        localStorage.setItem('pembayaran_list', JSON.stringify(list));
+        alert('✅ Pembayaran berhasil diperbarui!');
+        this.loadData();
+        this.closeModal();
+        return;
+      }
+      this.error = 'Pembayaran tidak ditemukan';
+      return;
+    }
+
     const newPembayaran: Pembayaran = {
       id: Date.now().toString(),
       peserta: this.peserta.trim(),
       jumlah: parseInt(this.jumlah),
       metode: this.metode,
       status: this.status,
-      tanggal: new Date().toISOString().split('T')[0]
+      tanggal: new Date().toISOString().split('T')[0],
     };
+    list.push(newPembayaran);
+    localStorage.setItem('pembayaran_list', JSON.stringify(list));
 
-    this.pembayaranList.push(newPembayaran);
-    localStorage.setItem('pembayaran_list', JSON.stringify(this.pembayaranList));
-    
     alert('✅ Pembayaran berhasil dicatat!');
     this.loadData();
     this.closeModal();
@@ -112,7 +147,7 @@ export class PembayaranComponent implements OnInit {
 
   deletePembayaran(id: string) {
     if (!confirm('Hapus pembayaran ini?')) return;
-    this.pembayaranList = this.pembayaranList.filter(p => p.id !== id);
+    this.pembayaranList = this.pembayaranList.filter((p) => p.id !== id);
     localStorage.setItem('pembayaran_list', JSON.stringify(this.pembayaranList));
     alert('✅ Pembayaran berhasil dihapus!');
   }
@@ -120,15 +155,12 @@ export class PembayaranComponent implements OnInit {
   getTotalPeserta() {
     return this.pembayaranList.length;
   }
-
   getLunasCount() {
-    return this.pembayaranList.filter(p => p.status === 'Lunas').length;
+    return this.pembayaranList.filter((p) => p.status === 'Lunas').length;
   }
-
   getBelumLunasCount() {
-    return this.pembayaranList.filter(p => p.status === 'Belum Lunas').length;
+    return this.pembayaranList.filter((p) => p.status === 'Belum Lunas').length;
   }
-
   formatRupiah(amount: number) {
     return 'Rp ' + amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   }

@@ -8,8 +8,7 @@ import { ApiService } from './api.service';
   selector: 'app-register',
   standalone: true,
   imports: [FormsModule, CommonModule],
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css'],
+  templateUrl: './register.component.html'
 })
 export class RegisterComponent {
   username = '';
@@ -54,26 +53,24 @@ export class RegisterComponent {
     }
 
     // Register via API
-    this.apiService.register(
-      this.username.trim(),
-      this.email.trim(),
-      this.fullName.trim(),
-      this.password.trim(),
-      this.phone.trim()
-    ).subscribe({
-      next: () => {
-        alert('✅ Pendaftaran berhasil! Silakan login.');
-        this.successMessage = 'Pendaftaran berhasil! Redirect ke login...';
-        this.loading = false;
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 2000);
-      },
-      error: (err) => {
-        alert('❌ ' + (err.error?.error || 'Registrasi gagal!'));
-        this.errorMessage = err.error?.error || 'Registrasi gagal!';
-        this.loading = false;
-      }
-    });
+    this.apiService
+      .register(
+        this.username.trim(),
+        this.email.trim(),
+        this.fullName.trim(),
+        this.password,
+        this.phone.trim()
+      )
+      .subscribe({
+        next: () => {
+          this.successMessage = 'Pendaftaran berhasil! Redirect ke login...';
+          this.loading = false;
+          setTimeout(() => this.router.navigate(['/login']), 1200);
+        },
+        error: (err) => {
+          this.errorMessage = err.error?.error || 'Gagal mendaftar';
+          this.loading = false;
+        },
+      });
   }
 }
