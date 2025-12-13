@@ -1,6 +1,5 @@
 <div class="form-wrap">
   <h3>Edit Peserta</h3>
-  
   <div *ngIf="initialLoading" style="padding:1rem;background:#f0f7ff;border-radius:4px;color:#0066cc;">
     ⏳ Loading data peserta... (ID: {{ id }})
   </div>
@@ -9,26 +8,38 @@
     ❌ {{ error }}
   </div>
 
-  <form (ngSubmit)="submit()" [style.display]="initialLoading ? 'none' : 'block'">
+  <form (ngSubmit)="submit()" [style.display]="initialLoading ? 'none' : 'block'" style="display:flex;flex-direction:column;gap:1rem;max-width:500px;">
     <div style="margin-bottom:1rem;padding:0.5rem;background:#fffacd;border-radius:3px;font-size:0.9rem;">
       📝 Nama saat ini: <strong>{{ name }}</strong>
     </div>
 
-    <label>Nama
-      <input type="text" name="name" [(ngModel)]="name" required />
-    </label>
+    <div style="display:flex;flex-direction:column;gap:0.5rem;">
+      <label style="font-weight:bold;">Nama</label>
+      <input type="text" name="name" [(ngModel)]="name" required style="padding:0.5rem;border:1px solid #ccc;border-radius:3px;" />
+    </div>
 
-    <label>Email
-      <input type="email" name="email" [(ngModel)]="email" />
-    </label>
+    <div style="display:flex;flex-direction:column;gap:0.5rem;">
+      <label style="font-weight:bold;">Email</label>
+      <input type="email" name="email" [(ngModel)]="email" style="padding:0.5rem;border:1px solid #ccc;border-radius:3px;" />
+    </div>
 
-    <label>Telepon
-      <input type="text" name="phone" [(ngModel)]="phone" />
-    </label>
+    <div style="display:flex;flex-direction:column;gap:0.5rem;">
+      <label style="font-weight:bold;">Telepon</label>
+      <input type="text" name="phone" [(ngModel)]="phone" style="padding:0.5rem;border:1px solid #ccc;border-radius:3px;" />
+    </div>
 
-    <div class="actions">
-      <button type="submit" [disabled]="loading || !name.trim()">{{ loading ? 'Menyimpan...' : 'Simpan Perubahan' }}</button>
-      <button type="button" (click)="cancel()" [disabled]="loading">Batal</button>
+    <div style="display:flex;flex-direction:column;gap:0.5rem;">
+      <label style="font-weight:bold;">Kelas Level</label>
+      <select class="form-control" name="classLevel" [(ngModel)]="classLevel" style="padding:0.5rem;border:1px solid #ccc;border-radius:3px;">
+        <option value="Beginner">Beginner Level</option>
+        <option value="Intermediate">Intermediate Level</option>
+        <option value="Advanced">Advanced Level</option>
+      </select>
+    </div>
+
+    <div style="display:flex;gap:1rem;margin-top:1rem;">
+      <button type="submit" [disabled]="loading || !(name && name.trim())" style="padding:0.75rem 1.5rem;background:#007bff;color:white;border:none;border-radius:3px;cursor:pointer;font-weight:bold;">{{ loading ? 'Menyimpan...' : 'Simpan Perubahan' }}</button>
+      <button type="button" (click)="cancel()" [disabled]="loading" style="padding:0.75rem 1.5rem;background:#6c757d;color:white;border:none;border-radius:3px;cursor:pointer;font-weight:bold;">Batal</button>
     </div>
   </form>
 </div>

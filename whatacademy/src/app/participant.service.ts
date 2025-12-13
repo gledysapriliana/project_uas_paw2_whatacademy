@@ -5,6 +5,7 @@ export interface Participant {
   name: string;
   email?: string;
   phone?: string;
+  classLevel?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -89,6 +90,13 @@ export class ParticipantService {
     if (index !== -1) {
       items[index] = { ...items[index], ...p };
       this.writeKeys(items);
+      console.log('Updated participant in service:', items[index]);
+      console.log('Both localStorage keys updated:', {
+        [this.storageKey]: localStorage.getItem(this.storageKey),
+        [this.altKey]: localStorage.getItem(this.altKey)
+      });
+    } else {
+      console.error('Participant not found in service.update(). ID:', id);
     }
   }
 

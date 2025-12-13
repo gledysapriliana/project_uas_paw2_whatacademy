@@ -22,7 +22,23 @@
             <div class="card-title fw-bold mb-3">{{ k.namaKelas }}</div>
             <div class="small mb-2">🕐 {{ k.jadwal }}</div>
             <div class="small mb-2">👨‍🏫 {{ k.instruktur }}</div>
-            <div class="small mb-4">👥 {{ k.kapasitas }} peserta</div>
+            <div class="small mb-2">👥 {{ k.kapasitas }} peserta</div>
+            
+            <!-- Daftar Anggota Kelas -->
+            <div class="mt-3 mb-3">
+              <h6 class="mb-2 fw-bold" style="font-size: 0.9rem;">Anggota Kelas:</h6>
+              <div *ngIf="getMembersOfClass(group.level).length > 0; else noMembers">
+                <ul class="list-unstyled small">
+                  <li *ngFor="let member of getMembersOfClass(group.level)" class="mb-1 ps-2 border-start border-3" style="border-color: #667eea; background: #f8f9ff; padding: 5px;">
+                    {{ member.name }} ({{ member.email }})
+                  </li>
+                </ul>
+              </div>
+              <ng-template #noMembers>
+                <p class="text-muted small mb-0">Belum ada anggota</p>
+              </ng-template>
+            </div>
+            
             <button class="btn btn-sm btn-primary me-2" (click)="openModal(k)">✏️ Edit</button>
             <button class="btn btn-sm btn-danger" (click)="deleteKelas(k.id)">🗑️ Hapus</button>
           </div>

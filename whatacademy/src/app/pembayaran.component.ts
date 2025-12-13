@@ -9,6 +9,7 @@ interface Pembayaran {
   metode: string;
   status: string;
   tanggal: string;
+  classLevel?: string;
 }
 
 @Component({
@@ -25,11 +26,18 @@ export class PembayaranComponent implements OnInit {
   metode = 'Transfer Bank';
   status = 'Lunas';
   error = '';
+  pesertaList: any[] = [];
 
   editingId: string | null = null;
 
   ngOnInit() {
     this.loadData();
+    this.loadPesertaList();
+  }
+
+  loadPesertaList() {
+    const stored = localStorage.getItem('whatacademy_participants');
+    this.pesertaList = stored ? JSON.parse(stored) : [];
   }
 
   loadData() {
@@ -108,16 +116,25 @@ export class PembayaranComponent implements OnInit {
     const stored = localStorage.getItem('pembayaran_list');
     const list: Pembayaran[] = stored ? JSON.parse(stored) : this.getDefaultPayments();
 
+    // Extract classLevel from peserta value (format: "nama|classLevel")
+    let classLevel = '';
+    const pesertaParts = this.peserta.split('|');
+    if (pesertaParts.length > 1) {
+      classLevel = pesertaParts[1];
+    }
+    const pesertaName = pesertaParts[0];
+
     if (this.editingId) {
       const idx = list.findIndex((p) => p.id === this.editingId);
       if (idx !== -1) {
         list[idx] = {
           id: this.editingId,
-          peserta: this.peserta.trim(),
+          peserta: pesertaName.trim(),
           jumlah: parseInt(this.jumlah),
           metode: this.metode,
           status: this.status,
           tanggal: new Date().toISOString().split('T')[0],
+          classLevel: classLevel,
         };
         localStorage.setItem('pembayaran_list', JSON.stringify(list));
         alert('✅ Pembayaran berhasil diperbarui!');
@@ -131,11 +148,12 @@ export class PembayaranComponent implements OnInit {
 
     const newPembayaran: Pembayaran = {
       id: Date.now().toString(),
-      peserta: this.peserta.trim(),
+      peserta: pesertaName.trim(),
       jumlah: parseInt(this.jumlah),
       metode: this.metode,
       status: this.status,
       tanggal: new Date().toISOString().split('T')[0],
+      classLevel: classLevel,
     };
     list.push(newPembayaran);
     localStorage.setItem('pembayaran_list', JSON.stringify(list));
@@ -161,6 +179,11 @@ export class PembayaranComponent implements OnInit {
   getBelumLunasCount() {
     return this.pembayaranList.filter((p) => p.status === 'Belum Lunas').length;
   }
+
+  getPesertaByClass(classLevel: string) {
+    return this.pesertaList.filter((p) => p.classLevel === classLevel);
+  }
+
   formatRupiah(amount: number) {
     return 'Rp ' + amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   }

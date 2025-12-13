@@ -15,6 +15,7 @@ export class TambahPesertaComponent {
   name = '';
   email = '';
   phone = '';
+  classLevel = 'Beginner'; // Tambahan: pilih kelas
   error = '';
   loading = false;
 
@@ -48,12 +49,14 @@ export class TambahPesertaComponent {
                     email: this.email.trim(),
                     phone: this.phone.trim(),
                   };
-            this.participantService.add({ name: p.name, email: p.email, phone: p.phone });
+            // Tambah class level ke participant
+            this.participantService.add({ name: p.name, email: p.email, phone: p.phone, classLevel: this.classLevel });
 
-            // Sync both localStorage keys after adding
+            // Sync both localStorage keys after adding dengan class level
             const current = JSON.parse(localStorage.getItem('whatacademy_participants') || '[]');
-            localStorage.setItem('participants', JSON.stringify(current));
-            localStorage.setItem('whatacademy_participants', JSON.stringify(current));
+            const withClass = current.map((item: any) => ({ ...item, classLevel: item.classLevel || this.classLevel }));
+            localStorage.setItem('participants', JSON.stringify(withClass));
+            localStorage.setItem('whatacademy_participants', JSON.stringify(withClass));
           } catch {}
 
           alert('✅ Peserta berhasil ditambahkan!');

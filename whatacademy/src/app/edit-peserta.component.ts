@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ApiService } from './api.service';
+import { ParticipantService } from './participant.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -14,14 +14,14 @@ export class EditPesertaComponent implements OnInit {
   name = '';
   email = '';
   phone = '';
+  classLevel = 'Beginner';
   id = '';
   error = '';
   loading = false;
   initialLoading = true;
-  success = '';
 
   constructor(
-    private apiService: ApiService,
+    private participantService: ParticipantService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -41,24 +41,21 @@ export class EditPesertaComponent implements OnInit {
 
   loadParticipant() {
     console.log('Loading participant with ID:', this.id);
-    this.apiService.getParticipant(this.id).subscribe({
-      next: (data: any) => {
-        console.log('Successfully loaded:', data);
-        this.name = data.name || '';
-        this.email = data.email || '';
-        this.phone = data.phone || '';
-        this.error = '';
-        this.initialLoading = false;
-      },
-      error: (err: any) => {
-        console.error('Load error:', err);
-        const msg = err.error?.error || err.message || 'Gagal memuat peserta';
-        this.error = 'Gagal memuat peserta: ' + msg;
-        this.initialLoading = false;
-        alert('❌ ' + this.error);
-        setTimeout(() => this.router.navigate(['/dashboard']), 1400);
-      },
-    });
+    const participant = this.participantService.getById(this.id);
+    
+    if (participant) {
+      console.log('Loaded participant:', participant);
+      this.name = participant.name || '';
+      this.email = participant.email || '';
+      this.phone = participant.phone || '';
+      this.classLevel = participant.classLevel || 'Beginner';
+      this.error = '';
+      this.initialLoading = false;
+    } else {
+      this.initialLoading = false;
+      this.error = 'Peserta dengan ID ' + this.id + ' tidak ditemukan!';
+      console.error('Participant not found with ID:', this.id);
+    }
   }
 
   submit() {
@@ -69,27 +66,31 @@ export class EditPesertaComponent implements OnInit {
     this.error = '';
     this.loading = true;
 
-    this.apiService
-      .updateParticipant(this.id, {
-        name: this.name.trim(),
-        email: this.email.trim(),
-        phone: this.phone.trim(),
-      })
-      .subscribe({
-        next: () => {
-          alert('✅ Peserta berhasil diperbarui!');
-          this.router.navigate(['/dashboard']);
-        },
-        error: (err: any) => {
-          const errMsg = err.error?.error || 'Gagal update peserta';
-          alert('❌ ' + errMsg);
-          this.error = errMsg;
-          this.loading = false;
-        },
-      });
+    const updateData = {
+      name: this.name.trim(),
+      email: this.email.trim(),
+      phone: this.phone.trim(),
+      classLevel: this.classLevel,
+    };
+
+    console.log('Submitting update:', { id: this.id, data: updateData });
+
+    try {
+      // Update via ParticipantService (synchronous, updates localStorage directly)
+      this.participantService.update(this.id, updateData);
+      console.log('Update success via ParticipantService');
+      alert('✅ Peserta berhasil diperbarui!');
+      // Redirect to peserta list
+      this.router.navigate(['/peserta']);
+    } catch (err) {
+      console.error('Update error:', err);
+      this.error = 'Gagal update peserta';
+      this.loading = false;
+      alert('❌ Gagal update peserta');
+    }
   }
 
   cancel() {
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/peserta']);
   }
 }
