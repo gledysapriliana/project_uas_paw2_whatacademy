@@ -65,9 +65,15 @@
         <!-- Tampilkan pembayaran yang ada -->
         <tr *ngFor="let p of pembayaranList">
           <td>
-            <strong>{{ p.peserta }}</strong>
+            <!-- tampilkan hanya nama peserta.
+                 p.peserta biasanya disimpan seperti: "Nama (email)|Class".
+                 Kita aman-kan dengan (p.peserta || '') sebelum split. -->
+            <strong>{{ ((p.peserta || '').split('|')[0]).split(' (')[0] }}</strong>
           </td>
-          <td><span class="badge bg-info">{{ p.classLevel || '-' }}</span></td>
+          <!-- jika p.classLevel kosong, fallback ke bagian setelah '|' di p.peserta -->
+          <td>
+            <span class="badge bg-info">{{ p.classLevel || ((p.peserta || '').split('|')[1] || '-') }}</span>
+          </td>
           <td>{{ p.metode }}</td>
           <td>
             <span class="badge" [ngClass]="p.status === 'Lunas' ? 'bg-success' : 'bg-danger'">{{
