@@ -19,12 +19,10 @@ export const appConfig: ApplicationConfig = {
   ],
 };
 
-// Initialize test user on app startup
 export function initializeApp() {
   return () => {
     const stored = localStorage.getItem('whatacademy_users');
     if (!stored) {
-      // Create default test user
       const testUsers = {
         testuser: {
           username: 'testuser',

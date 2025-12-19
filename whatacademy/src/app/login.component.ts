@@ -27,11 +27,9 @@ export class LoginComponent {
     this.loading = true;
     this.api.login(this.username.trim(), this.password).subscribe({
       next: (res) => {
-        // Store user session
         localStorage.setItem('currentUser', res.user.username);
         localStorage.setItem('currentUserData', JSON.stringify(res.user));
         this.loading = false;
-        // Navigate via router without reloading the page
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {

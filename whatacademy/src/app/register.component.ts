@@ -28,7 +28,6 @@ export class RegisterComponent {
     this.successMessage = '';
     this.loading = true;
 
-    // Validasi
     if (
       !this.username.trim() ||
       !this.email.trim() ||
@@ -52,7 +51,6 @@ export class RegisterComponent {
       return;
     }
 
-    // Register via API
     this.apiService
       .register(
         this.username.trim(),

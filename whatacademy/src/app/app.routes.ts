@@ -15,7 +15,6 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
 
-  // Protected routes (require login)
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'peserta', component: ParticipantListComponent, canActivate: [AuthGuard] },
   { path: 'tambah-peserta', component: TambahPesertaComponent, canActivate: [AuthGuard] },
@@ -24,6 +23,5 @@ export const routes: Routes = [
   { path: 'pembayaran', component: PembayaranComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
 
-  // Fallback
   { path: '**', redirectTo: 'login' },
 ];

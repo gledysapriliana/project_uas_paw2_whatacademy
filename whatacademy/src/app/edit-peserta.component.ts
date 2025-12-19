@@ -42,7 +42,7 @@ export class EditPesertaComponent implements OnInit {
   loadParticipant() {
     console.log('Loading participant with ID:', this.id);
     const participant = this.participantService.getById(this.id);
-    
+
     if (participant) {
       console.log('Loaded participant:', participant);
       this.name = participant.name || '';
@@ -76,11 +76,9 @@ export class EditPesertaComponent implements OnInit {
     console.log('Submitting update:', { id: this.id, data: updateData });
 
     try {
-      // Update via ParticipantService (synchronous, updates localStorage directly)
       this.participantService.update(this.id, updateData);
       console.log('Update success via ParticipantService');
       alert('✅ Peserta berhasil diperbarui!');
-      // Redirect to peserta list
       this.router.navigate(['/peserta']);
     } catch (err) {
       console.error('Update error:', err);

@@ -49,12 +49,18 @@ export class TambahPesertaComponent {
                     email: this.email.trim(),
                     phone: this.phone.trim(),
                   };
-            // Tambah class level ke participant
-            this.participantService.add({ name: p.name, email: p.email, phone: p.phone, classLevel: this.classLevel });
+            this.participantService.add({
+              name: p.name,
+              email: p.email,
+              phone: p.phone,
+              classLevel: this.classLevel,
+            });
 
-            // Sync both localStorage keys after adding dengan class level
             const current = JSON.parse(localStorage.getItem('whatacademy_participants') || '[]');
-            const withClass = current.map((item: any) => ({ ...item, classLevel: item.classLevel || this.classLevel }));
+            const withClass = current.map((item: any) => ({
+              ...item,
+              classLevel: item.classLevel || this.classLevel,
+            }));
             localStorage.setItem('participants', JSON.stringify(withClass));
             localStorage.setItem('whatacademy_participants', JSON.stringify(withClass));
           } catch {}

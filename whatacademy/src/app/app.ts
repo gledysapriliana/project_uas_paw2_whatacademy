@@ -7,12 +7,6 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './app.html',
-
-  // Pilih salah satu:
-  // 1) Kalau kamu tidak punya app.css, COMMENT/HAPUS baris ini
-  // styleUrls: ['./app.css'],
-
-  // 2) Kalau mau tetap pakai, pastikan file src/app/app.css benar-benar ada
 })
 export class App implements OnInit {
   protected readonly title = signal('whatacademy');

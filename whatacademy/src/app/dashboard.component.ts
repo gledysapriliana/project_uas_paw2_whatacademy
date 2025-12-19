@@ -77,7 +77,6 @@ export class DashboardComponent implements OnInit {
     if (!list || list.length === 0) {
       list = this.readLocalArray('whatacademy_participants');
     }
-    // Sort by createdAt (newest first) and take last 4
     this.recentParticipants = list
       .sort((a: any, b: any) => {
         const dateA = new Date(a.createdAt || 0).getTime();

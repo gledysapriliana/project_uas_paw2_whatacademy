@@ -116,7 +116,6 @@ export class PembayaranComponent implements OnInit {
     const stored = localStorage.getItem('pembayaran_list');
     const list: Pembayaran[] = stored ? JSON.parse(stored) : this.getDefaultPayments();
 
-    // Extract classLevel from peserta value (format: "nama|classLevel")
     let classLevel = '';
     const pesertaParts = this.peserta.split('|');
     if (pesertaParts.length > 1) {

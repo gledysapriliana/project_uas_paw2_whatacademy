@@ -168,7 +168,6 @@ export class KelasComponent implements OnInit {
     this.loadData();
   }
 
-  // Tambahan: ambil anggota dari kelas berdasarkan level
   getMembersOfClass(level: string): any[] {
     const participants = JSON.parse(localStorage.getItem('whatacademy_participants') || '[]');
     return participants.filter((p: any) => p.classLevel === level);

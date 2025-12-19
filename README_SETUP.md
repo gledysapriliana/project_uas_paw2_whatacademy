@@ -4,9 +4,10 @@
 
 ```
 project_uas_paw2_whatacademy/
-├── backend/           (Node.js Express server)
-│   ├── data/         (JSON database)
+├── backend/           (Node.js Express server with MySQL)
+│   ├── data/         (Legacy JSON files - migrated to MySQL)
 │   ├── server.js
+│   ├── migrate.js    (Migration script)
 │   └── package.json
 └── whatacademy/      (Angular frontend)
     ├── src/
@@ -14,13 +15,31 @@ project_uas_paw2_whatacademy/
     └── angular.json
 ```
 
+## Prerequisites
+
+- Node.js installed
+- MySQL Server installed and running
+- MySQL Workbench (optional, for database management)
+
+## Database Setup
+
+1. Install MySQL Server (or use XAMPP/WAMP)
+2. Start MySQL service
+3. The application will automatically create the 'whatacademy' database and tables on first run
+
 ## Cara Menjalankan
 
-### 1. Backend (Node.js Express)
+### 1. Backend (Node.js Express with MySQL)
 
 ```powershell
 # Terminal 1 - Buka folder backend
 cd backend
+
+# Install dependencies
+npm install
+
+# Migrate existing data from JSON to MySQL (optional, run once)
+npm run migrate
 
 # Jalankan server
 npm start
@@ -28,7 +47,15 @@ npm start
 
 Server akan berjalan di `http://localhost:3000`
 
-**API Endpoints:**
+**Database Configuration:**
+
+- Host: localhost
+- User: root
+- Password: '' (empty - change in server.js if needed)
+- Database: whatacademy
+
+**API Endpoints:** (same as before)
+
 - `POST /api/auth/register` - Register user baru
 - `POST /api/auth/login` - Login user
 - `GET /api/participants` - Get semua peserta
@@ -55,12 +82,14 @@ Frontend akan berjalan di `http://localhost:4200`
 ## Testing Flow
 
 ### 1. Register User Baru
+
 - Buka `http://localhost:4200/register`
 - Isi form dengan username, email, password, etc
 - Klik "Daftar"
 - Jika berhasil, redirect ke login
 
 ### 2. Login
+
 - Buka `http://localhost:4200/login`
 - Masukkan username dan password
 - **Pesan error jika:**
@@ -69,6 +98,7 @@ Frontend akan berjalan di `http://localhost:4200`
 - Jika benar, masuk ke dashboard
 
 ### 3. Dashboard
+
 - Lihat daftar peserta
 - Jika admin: bisa tambah, edit, hapus peserta
 - Jika user biasa: hanya bisa lihat
@@ -76,19 +106,23 @@ Frontend akan berjalan di `http://localhost:4200`
 ## Fitur yang Telah Diimplementasikan
 
 ✅ **Authentication:**
+
 - Register user dengan validasi
 - Login dengan username & password
 - Error handling yang baik
 
 ✅ **Database:**
+
 - User data disimpan di `backend/data/users.json`
 - Participant data disimpan di `backend/data/participants.json`
 
 ✅ **Dashboard:**
+
 - Tampilan berbeda untuk admin dan user biasa
 - CRUD peserta (untuk admin)
 
 ✅ **Validasi:**
+
 - Username harus unik
 - Password minimal 6 karakter
 - Semua field wajib diisi pada register
@@ -96,14 +130,18 @@ Frontend akan berjalan di `http://localhost:4200`
 ## Troubleshooting
 
 **Port 3000 sudah digunakan?**
+
 - Edit `server.js` di backend, ubah `const PORT = 3000;` ke port lain (misal 5000)
 - Update juga URL di `api.service.ts` frontend
 
 **CORS Error?**
+
 - Backend sudah enable CORS untuk localhost
 
 **Database tidak tersimpan?**
+
 - Pastikan folder `backend/data/` sudah ada dan writable
 
 **Angular compilation error?**
+
 - Coba `npm install` ulang di folder whatacademy

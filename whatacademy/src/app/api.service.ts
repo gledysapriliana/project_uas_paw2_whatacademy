@@ -49,14 +49,10 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  /* ---------------------------
-     Helpers: localStorage users
-     --------------------------- */
   private loadUsers(): Record<string, StoredUser> {
     try {
       const raw = localStorage.getItem(this.usersKey);
       const users = raw ? JSON.parse(raw) : {};
-      // Seed default users when none exist to allow login in dev/demo
       if (!raw || Object.keys(users).length === 0) {
         const defaultUsers: Record<string, StoredUser> = {
           testuser: {
@@ -89,9 +85,6 @@ export class ApiService {
     localStorage.setItem(this.usersKey, JSON.stringify(users));
   }
 
-  /* ---------------------------
-     Helpers: localStorage participants
-     --------------------------- */
   private loadParticipantsLocal(): Participant[] {
     try {
       const raw = localStorage.getItem(this.participantsKey);
@@ -105,9 +98,6 @@ export class ApiService {
     localStorage.setItem(this.participantsKey, JSON.stringify(items));
   }
 
-  /* ---------------------------
-     Register
-     --------------------------- */
   register(
     username: string,
     email: string,
@@ -115,7 +105,6 @@ export class ApiService {
     password: string,
     phone: string
   ): Observable<RegisterResponse> {
-    // Try API call first; if it fails use local fallback
     return this.http
       .post<RegisterResponse>(`${API_URL}/auth/register`, {
         username,
@@ -126,7 +115,6 @@ export class ApiService {
       })
       .pipe(
         catchError(() => {
-          // fallback: localStorage
           const users = this.loadUsers();
           if (users[username]) {
             return throwError(() => ({ error: { error: 'Username sudah terdaftar' } }));
@@ -144,13 +132,9 @@ export class ApiService {
       );
   }
 
-  /* ---------------------------
-     Login
-     --------------------------- */
   login(username: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${API_URL}/auth/login`, { username, password }).pipe(
       catchError(() => {
-        // fallback: validate against localStorage users
         const users = this.loadUsers();
 
         const u = users[username];
@@ -173,10 +157,6 @@ export class ApiService {
     );
   }
 
-  /* ---------------------------
-     Participants (list/add/get/update/delete)
-     These try API then fallback to localStorage
-     --------------------------- */
   getParticipants(): Observable<Participant[]> {
     return this.http.get<Participant[]>(`${API_URL}/participants`).pipe(
       catchError(() => {
