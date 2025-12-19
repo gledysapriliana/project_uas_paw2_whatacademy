@@ -117,47 +117,6 @@ const deleteParticipant = async (id) => {
   await db.execute("DELETE FROM participants WHERE id = ?", [id]);
 };
 
-app.post("/api/auth/register", async (req, res) => {
-  const { username, email, fullName, password, phone } = req.body;
-
-  const normalizedUsername = username
-    ? String(username).trim().toLowerCase()
-    : "";
-
-  // Validation
-  if (!username || !email || !fullName || !password) {
-    return res.status(400).json({ error: "Semua field harus diisi!" });
-  }
-
-  if (password.length < 6) {
-    return res.status(400).json({ error: "Password minimal 6 karakter!" });
-  }
-
-  try {
-    const existingUser = await getUserByUsername(normalizedUsername);
-    if (existingUser) {
-      return res.status(400).json({ error: "Username sudah terdaftar!" });
-    }
-
-    const userId = await createUser({
-      username: String(username).trim(),
-      email: String(email).trim(),
-      fullName: String(fullName).trim(),
-      password: String(password),
-      phone: phone ? String(phone).trim() : "",
-      role: "user",
-    });
-
-    res.status(201).json({
-      message: "Registrasi berhasil!",
-      user: { username, email, fullName },
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
 // Login
 app.post("/api/auth/login", async (req, res) => {
   const { username, password } = req.body;

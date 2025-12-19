@@ -16,15 +16,6 @@ export interface LoginResponse {
   };
 }
 
-export interface RegisterResponse {
-  message: string;
-  user: {
-    username: string;
-    email: string;
-    fullName: string;
-  };
-}
-
 export interface Participant {
   id: string;
   name: string;
@@ -96,40 +87,6 @@ export class ApiService {
 
   private saveParticipantsLocal(items: Participant[]) {
     localStorage.setItem(this.participantsKey, JSON.stringify(items));
-  }
-
-  register(
-    username: string,
-    email: string,
-    fullName: string,
-    password: string,
-    phone: string
-  ): Observable<RegisterResponse> {
-    return this.http
-      .post<RegisterResponse>(`${API_URL}/auth/register`, {
-        username,
-        email,
-        fullName,
-        password,
-        phone,
-      })
-      .pipe(
-        catchError(() => {
-          const users = this.loadUsers();
-          if (users[username]) {
-            return throwError(() => ({ error: { error: 'Username sudah terdaftar' } }));
-          }
-          users[username] = { username, email, fullName, phone, password, role: 'user' };
-          this.saveUsers(users);
-
-          const response: RegisterResponse = {
-            message: 'registered (local)',
-            user: { username, email, fullName },
-          };
-          // simulate network latency a little
-          return of(response).pipe(delay(300));
-        })
-      );
   }
 
   login(username: string, password: string): Observable<LoginResponse> {
