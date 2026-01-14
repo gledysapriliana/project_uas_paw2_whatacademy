@@ -37,7 +37,17 @@ export class PembayaranComponent implements OnInit {
 
   loadPesertaList() {
     const stored = localStorage.getItem('whatacademy_participants');
-    this.pesertaList = stored ? JSON.parse(stored) : [];
+    if (stored) {
+      try {
+        this.pesertaList = JSON.parse(stored);
+        console.log('Peserta List loaded:', this.pesertaList);
+      } catch (e) {
+        console.error('Error parsing peserta list:', e);
+        this.pesertaList = [];
+      }
+    } else {
+      this.pesertaList = [];
+    }
   }
 
   loadData() {
@@ -75,6 +85,7 @@ export class PembayaranComponent implements OnInit {
   }
 
   openModal(edit?: Pembayaran) {
+    this.loadPesertaList(); // Refresh peserta list setiap kali modal dibuka
     this.showModal = true;
     if (edit) {
       this.editingId = edit.id;
@@ -104,12 +115,36 @@ export class PembayaranComponent implements OnInit {
   }
 
   submit() {
-    if (!this.peserta.trim()) {
+    // Reset error
+    this.error = '';
+
+    // Validasi peserta
+    if (!this.peserta || !this.peserta.trim()) {
       this.error = 'Peserta tidak boleh kosong';
       return;
     }
-    if (!this.jumlah.trim()) {
+
+    // Validasi jumlah
+    if (!this.jumlah || !this.jumlah.toString().trim()) {
       this.error = 'Jumlah tidak boleh kosong';
+      return;
+    }
+
+    const jumlahNum = parseInt(this.jumlah.toString());
+    if (isNaN(jumlahNum) || jumlahNum <= 0) {
+      this.error = 'Jumlah harus angka positif';
+      return;
+    }
+
+    // Validasi metode
+    if (!this.metode || !this.metode.trim()) {
+      this.error = 'Metode pembayaran tidak boleh kosong';
+      return;
+    }
+
+    // Validasi status
+    if (!this.status || !this.status.trim()) {
+      this.error = 'Status tidak boleh kosong';
       return;
     }
 
@@ -117,21 +152,27 @@ export class PembayaranComponent implements OnInit {
     const list: Pembayaran[] = stored ? JSON.parse(stored) : this.getDefaultPayments();
 
     let classLevel = '';
+    let pesertaName = '';
+    
+    // Parse peserta string
     const pesertaParts = this.peserta.split('|');
     if (pesertaParts.length > 1) {
-      classLevel = pesertaParts[1];
+      classLevel = pesertaParts[1].trim();
+      pesertaName = pesertaParts[0].trim();
+    } else {
+      pesertaName = this.peserta.trim();
     }
-    const pesertaName = pesertaParts[0];
 
     if (this.editingId) {
+      // Mode edit
       const idx = list.findIndex((p) => p.id === this.editingId);
       if (idx !== -1) {
         list[idx] = {
           id: this.editingId,
-          peserta: pesertaName.trim(),
-          jumlah: parseInt(this.jumlah),
-          metode: this.metode,
-          status: this.status,
+          peserta: pesertaName,
+          jumlah: jumlahNum,
+          metode: this.metode.trim(),
+          status: this.status.trim(),
           tanggal: new Date().toISOString().split('T')[0],
           classLevel: classLevel,
         };
@@ -145,21 +186,36 @@ export class PembayaranComponent implements OnInit {
       return;
     }
 
+    // Mode tambah baru
     const newPembayaran: Pembayaran = {
       id: Date.now().toString(),
-      peserta: pesertaName.trim(),
-      jumlah: parseInt(this.jumlah),
-      metode: this.metode,
-      status: this.status,
+      peserta: pesertaName,
+      jumlah: jumlahNum,
+      metode: this.metode.trim(),
+      status: this.status.trim(),
       tanggal: new Date().toISOString().split('T')[0],
       classLevel: classLevel,
     };
+    
     list.push(newPembayaran);
     localStorage.setItem('pembayaran_list', JSON.stringify(list));
 
     alert('✅ Pembayaran berhasil dicatat!');
     this.loadData();
     this.closeModal();
+  }
+
+  isFormValid(): boolean {
+    return !!(
+      this.peserta && 
+      this.peserta.trim() && 
+      this.jumlah && 
+      parseInt(this.jumlah.toString()) > 0 && 
+      this.metode && 
+      this.metode.trim() && 
+      this.status && 
+      this.status.trim()
+    );
   }
 
   deletePembayaran(id: string) {
